@@ -11,6 +11,9 @@
   * [Promises&Async/Await](#Promises&Async/Await)
   * [Optional Chaining (?.)&Nullish Coalescing (??)](#Optional-Chaining-(?.)&Nullish-Coalescing-(??))
   * [ES Modules](#ES-Modules)
+  
+  * [What is React?](#what-is-react?)
+  * [Component-based architecture](#Component-based-architecture)
 ---
 
 ## JavaScript Skills
@@ -1101,3 +1104,74 @@ import { User } from "./user";
 
 ---
 
+# What is React?
+```
+React ဆိုတာ ကမ္ဘာပေါ်မှာ လူသုံးအများဆုံးနဲ့ နာမည်အကြီးဆုံး JavaScript Library တစ်ခုဖြစ်ပါတယ်။
+သူ့ကို Facebook (Meta) က ၂၀၁၃ ခုနှစ်မှာ စတင်ထုတ်လုပ်ခဲ့တာဖြစ်ပြီး၊ Website တွေရဲ့ User Interface (UI) တွေကို အလွယ်တကူ တည်ဆောက်ဖို့အတွက် အသုံးပြုပါတယ်။
+
+React ရဲ့ အဓိက သဘောတရားတွေကို အရိုးရှင်းဆုံး မြန်မာလို ရှင်းပြပေးပါမယ်။
+
+၁။ Component-Based (အစိတ်အပိုင်းလေးများဖြင့် တည်ဆောက်ခြင်း)
+React ရဲ့ အားသာချက်က Website တစ်ခုလုံးကို အစိတ်အပိုင်းလေးတွေ (Components) အဖြစ် ခွဲပစ်လိုက်တာပါ။
+
+ဥပမာ- Website တစ်ခုမှာ Header တစ်ခု၊ Sidebar တစ်ခု၊ Footer တစ်ခု စသဖြင့် ရှိမယ်ဆိုရင် အဲဒါတွေကို သီးခြားစီ Component တစ်ခုချင်းစီအဖြစ် ရေးလို့ရပါတယ်။
+
+ပြီးမှ အဲဒီ Component လေးတွေကို အရုပ်ဆက်သလို ပြန်တွဲလိုက်တာပါ။ အစိတ်အပိုင်းတစ်ခုကို တစ်ခါရေးထားပြီး နေရာတော်တော်များများမှာ ပြန်သုံးလို့ရတာ (Reusability) က React ရဲ့ အသက်ပါ။
+
+၂။ Declarative (ဘာဖြစ်ချင်လဲဆိုတာပဲ ပြောဖို့လိုခြင်း)
+ရိုးရိုး JavaScript နဲ့ဆိုရင် UI ပြောင်းလဲဖို့အတွက် "ဘာကိုနှိပ်ရင် ဘာဖြစ်ရမယ်" ဆိုတာကို အဆင့်ဆင့် ရေးရပါတယ်။ ဒါကို Imperative လို့ ခေါ်ပါတယ်။ React မှာတော့ "ငါ့ရဲ့ Website State က ဒီလိုဖြစ်နေရင် UI က ဒီလိုပုံစံ ပေါ်နေရမယ်" လို့ပဲ ပြောထားလိုက်ရုံပါပဲ။ အနောက်ကနေ လိုအပ်တဲ့ ပြောင်းလဲမှုတွေကို React က အလိုအလျောက် လုပ်ပေးသွားတာပါ။
+
+၃။ Virtual DOM (အလုပ်လုပ်ပုံ မြန်ဆန်ခြင်း)
+Website တစ်ခုမှာ တစ်ခုခု ပြောင်းလဲသွားတိုင်း Website တစ်ခုလုံးကို Refresh လုပ်နေရင် အရမ်းနှေးပါတယ်။ React က Virtual DOM ဆိုတဲ့ နည်းပညာကို သုံးပါတယ်။ သူက လက်ရှိ Website ရဲ့ ပုံတူပွားတစ်ခုကို Memory ထဲမှာ သိမ်းထားပြီး၊ တကယ်ပြောင်းလဲသွားတဲ့ အစိတ်အပိုင်းလေးကိုပဲ ရွေးပြီး Update လုပ်ပေးတာကြောင့် Website တွေက အရမ်းကို မြန်ဆန်နေတာဖြစ်ပါတယ်။
+```
+
+---
+
+# Component-based architecture
+
+```
+Component-based architecture ဆိုတာ Website တစ်ခုလုံးကို စာမျက်နှာအကြီးကြီးတစ်ခုအနေနဲ့ မစဉ်းစားဘဲ သေးငယ်ပြီး သီးခြားစီရှိတဲ့ အစိတ်အပိုင်းလေးတွေ (Components) အဖြစ် ခွဲထုတ်ပြီး တည်ဆောက်တဲ့ နည်းလမ်းဖြစ်ပါတယ်။
+
+ဒါကို သင့်ရဲ့ README မှာ ထည့်သွင်းဖို့ အလွယ်ကူဆုံး ရှင်းပြချက်နဲ့ အားသာချက်တွေကို ပြင်ဆင်ပေးလိုက်ပါတယ်။
+
+🏗 Component-Based Architecture
+React ရဲ့ အဓိက အခြေခံသဘောတရားမှာ Website တစ်ခုကို Lego တုံးလေးတွေလို အပိုင်းပိုင်းခွဲပြီး ပြန်လည် စုစည်းတည်ဆောက်ခြင်း ဖြစ်ပါတယ်။
+
+1. Component ဆိုတာ ဘာလဲ?
+Component ဆိုတာ UI ရဲ့ အစိတ်အပိုင်းတစ်ခုကို ကိုယ်စားပြုတဲ့ JavaScript Function တစ်ခု ဖြစ်ပါတယ်။ ၎င်းတွင် ကိုယ်ပိုင် Logic၊ Styles နှင့် Structure (JSX) များ ပါဝင်ပါတယ်။
+
+Atomic Components: အသေးဆုံး အစိတ်အပိုင်းများ (ဥပမာ - Button, Input, Icon)
+
+Molecule Components: အသေးလေးများ စုပေါင်းထားခြင်း (ဥပမာ - Search Bar = Input + Button)
+
+Organism Components: အပိုင်းအစကြီးများ (ဥပမာ - Navbar, Footer, Sidebar)
+
+2. အဓိက အားသာချက်များ (Benefits)
+Reusability (ပြန်လည်အသုံးပြုနိုင်ခြင်း): Button တစ်ခုကို Component အဖြစ် တစ်ခါရေးထားလျှင် Website တစ်ခုလုံး၏ မည်သည့်နေရာတွင်မဆို ပြန်ခေါ်သုံးနိုင်ပါတယ်။
+
+Predictability (ခန့်မှန်းရလွယ်ကူခြင်း): Component တစ်ခုချင်းစီက သီးခြားစီ အလုပ်လုပ်သောကြောင့် တစ်နေရာတွင် ပြင်လိုက်လျှင် အခြားမဆိုင်သော နေရာများတွင် Error တက်နိုင်ခြေ နည်းပါးသွားပါတယ်။
+
+Maintainability (ထိန်းသိမ်းရလွယ်ကူခြင်း): Code များ ရှုပ်ထွေးမလာဘဲ လိုအပ်သည့် အစိတ်အပိုင်းကိုသာ သွားရောက်ပြင်ဆင်ရန် လွယ်ကူစေပါတယ်။
+
+Separation of Concerns: Component တစ်ခုသည် ၎င်းနှင့်ဆိုင်သော အလုပ်တစ်ခုကိုသာ အာရုံစိုက် လုပ်ဆောင်ပါတယ်။
+
+3. Data Flow (Prop Drilling)
+Component-based architecture တွင် Data များသည် Parent (အပေါ်) မှ Child (အောက်) သို့ တစ်ဖက်သတ် စီးဆင်းပါတယ်။ ၎င်းကို Props ဟု ခေါ်ပါတယ်။
+
+4. Practical Structure
+React Project တစ်ခုတွင် Component များကို အောက်ပါအတိုင်း စုစည်းလေ့ရှိသည်-
+
+
+src/
+ ├── components/
+ │    ├── Button.js
+ │    ├── Card.js
+ │    └── Navbar.js
+ ├── App.js
+ └── index.js
+ 
+
+အနှစ်ချုပ် (Myanmar Language)
+Component-based architecture ဆိုတာ Website ကို အပိုင်းအစလေးတွေ ခွဲထုတ်လိုက်တာပါ။ ဒါမှသာ code ရေးရတာ ပိုမြန်လာမယ်၊ တစ်ခါရေးထားတာကို နေရာတိုင်းမှာ ပြန်သုံးလို့ရမယ်၊ ပြီးတော့ error ရှာရတာလည်း ပိုလွယ်ကူစေမှာ ဖြစ်ပါတယ်။
+
+```
