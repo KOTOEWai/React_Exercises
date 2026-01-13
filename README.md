@@ -8,7 +8,7 @@
   * [Short Conditionals](#Short-Conditionals)
   * [Three Array Methods](#Three-Array-Methods)
   * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript )
-  * [Promises & Async / Await ](#Promises-&-Async-/-Await )
+  * [Promises&Async/Await](#Promises&Async/Await )
 ---
 
 ## JavaScript Skills
@@ -536,7 +536,7 @@ const copy = { ...user }; // ✅ new object
 ---
 
 
-# Promises & Async / Await 
+# Promises&Async/Await 
 
 Promises နဲ့ Async / Await က JavaScript မှာ **asynchronous code** (API call, data fetching, timer, etc.) တွေကို handle လုပ်ဖို့ အရေးကြီးဆုံး concept တွေပါ။ React / Next.js မှာ API ခေါ်တဲ့အခါ မဖြစ်မနေ သိထားရပါမယ်။
 
