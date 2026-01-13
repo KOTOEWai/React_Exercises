@@ -5,8 +5,8 @@
   * [JavaScript Skills](#javascript-skills)
   * [Function Declarations vs Arrow Functions](#function-declarations-vs-arrow-functions)
   * [Template Literals](#template-literals)
-  * [Short Conditionals: &&, ||, Ternary Operator](#Short-Conditionals:&&,||,Ternary-Operator)
-  * [Three Array Methods: .map(), .filter(), .reduce()](#Three-Array-Methods:map(),filter(),reduce())
+  * [Short Conditionals](#Short-Conditionals)
+  * [Three Array Methods](#Three-Array-Methods)
   * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript )
 ---
 
@@ -201,7 +201,7 @@ const Button = ({ isPrimary }) => {
 
 ---
 
-## Short Conditionals: &&, ||, Ternary Operator
+## Short Conditionals
 
 
 React development မှာ UI တစ်ခုကို အခြေအနေ (Condition) ပေါ်မူတည်ပြီး ပြချင်တဲ့အခါ (Conditional Rendering) ဒီ Operator တွေကို အသုံးများပါတယ်။
@@ -274,7 +274,7 @@ Short-circuit OR (||): "မရှိရင် ဒါအစားထိုးမ�
 
 ---
 
-## Three Array Methods: .map(), .filter(), .reduce()
+## Three Array Methods
 
 React မှာ data တွေကို UI အဖြစ် ပြောင်းလဲတဲ့အခါ မူရင်း data (original array) ကို မထိခိုက်စေဘဲ အသစ်တစ်ခု ထုတ်ပေးတဲ့ ဒီ method တွေကို အသုံးများပါတယ်။
 
