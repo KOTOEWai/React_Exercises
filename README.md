@@ -1132,9 +1132,9 @@ Website တစ်ခုမှာ တစ်ခုခု ပြောင်းလ�
 ```
 Component-based architecture ဆိုတာ Website တစ်ခုလုံးကို စာမျက်နှာအကြီးကြီးတစ်ခုအနေနဲ့ မစဉ်းစားဘဲ သေးငယ်ပြီး သီးခြားစီရှိတဲ့ အစိတ်အပိုင်းလေးတွေ (Components) အဖြစ် ခွဲထုတ်ပြီး တည်ဆောက်တဲ့ နည်းလမ်းဖြစ်ပါတယ်။
 
-ဒါကို သင့်ရဲ့ README မှာ ထည့်သွင်းဖို့ အလွယ်ကူဆုံး ရှင်းပြချက်နဲ့ အားသာချက်တွေကို ပြင်ဆင်ပေးလိုက်ပါတယ်။
 
-🏗 Component-Based Architecture
+
+Component-Based Architecture
 React ရဲ့ အဓိက အခြေခံသဘောတရားမှာ Website တစ်ခုကို Lego တုံးလေးတွေလို အပိုင်းပိုင်းခွဲပြီး ပြန်လည် စုစည်းတည်ဆောက်ခြင်း ဖြစ်ပါတယ်။
 
 1. Component ဆိုတာ ဘာလဲ?
@@ -1175,3 +1175,74 @@ src/
 Component-based architecture ဆိုတာ Website ကို အပိုင်းအစလေးတွေ ခွဲထုတ်လိုက်တာပါ။ ဒါမှသာ code ရေးရတာ ပိုမြန်လာမယ်၊ တစ်ခါရေးထားတာကို နေရာတိုင်းမှာ ပြန်သုံးလို့ရမယ်၊ ပြီးတော့ error ရှာရတာလည်း ပိုလွယ်ကူစေမှာ ဖြစ်ပါတယ်။
 
 ```
+# JSX
+
+```
+
+JSX ဆိုတာ JavaScript XML ရဲ့ အတိုကောက်ဖြစ်ပါတယ်။ ၎င်းဟာ JavaScript ဖိုင်ထဲမှာ HTML ပုံစံ Syntax တွေကို တိုက်ရိုက်ရေးသားနိုင်အောင် ပြုလုပ်ပေးတဲ့ Extension တစ်ခု ဖြစ်ပါတယ်။
+
+React မှာ UI (User Interface) တွေကို တည်ဆောက်တဲ့အခါ JSX ကို မဖြစ်မနေ သုံးရပါတယ်။
+
+JSX (JavaScript XML)JSX က UI structure ကို မြင်သာအောင် ကူညီပေးပါတယ်။ 
+၎င်းဟာ Browser က တိုက်ရိုက်နားလည်တဲ့ code မဟုတ်ဘဲ Babel ကဲ့သို့သော Compiler များကနေတစ်ဆင့် ရိုးရိုး JavaScript (React.createElement) အဖြစ် ပြောင်းလဲပေးရပါတယ်။
+
+1. JSX ၏ အခြေခံ စည်းမျဉ်းများ (Basic Rules)JSX ကို ရေးသားတဲ့အခါ အောက်ပါအချက်တွေကို လိုက်နာရပါမယ်
+
+Single Parent Element: JSX ရဲ့ return ပြန်တဲ့နေရာမှာ အပြင်ဘက်ဆုံးက Element တစ်ခုတည်း (ဥပမာ- <div> သို့မဟုတ် Fragment <>) နဲ့ ပတ်ထားရပါမယ်။
+
+CamelCase Properties: HTML attributes တွေကို camelCase ပုံစံ ပြောင်းရေးရပါတယ်။
+
+class အစား className
+
+onclick အစား onClick
+
+tabindex အစား tabIndex
+
+Closing Tags: Tags အားလုံးမှာ ပိတ်တဲ့ tag ပါရပါမယ်။ (<img> ကို <img /> ဟု ရေးရပါမယ်)။
+
+2. Embedding Expressions (JavaScript ထည့်သွင်းခြင်း)
+
+JSX ထဲမှာ JavaScript variable တွေ၊ logic တွေကို သုံးချင်ရင် Curly braces { } ကို အသုံးပြုရပါတယ်။
+
+```js
+
+const name = "Aung Aung";
+const element = <h1>Hello, {name}</h1>;
+
+```
+
+3. JSX vs. HTMLJSX က HTML နဲ့ ဆင်တူပေမယ့် အလုပ်လုပ်ပုံ ကွာခြားချက်အချို့ ရှိပါတယ်။
+
+```
+
+Feature,                   HTML,                            JSX
+------------------------------------------------------------------------------------------
+Attribute Name,    -        class,                    -      className                    - 
+                   -                                  -                                   -
+Inline Style,      -        "color: red" (String)     -     {{ color: 'red' }} (Object)   -
+                   -                                  -                                   -
+JavaScript,        -        သီးသန့်ရေးရသည်,            -     { } ဖြင့် တိုက်ရိုက် ရေးနိုင်သည်      -
+                   -                                  -                                   -
+Self-closing,      -        <br> ရသည်,               -     <br /> ဟု ပိတ်ရသည်            -
+-------------------------------------------------------------------------------------------
+```
+
+4. Fragment ဆိုတာ ဘာလဲ? (<> </>)
+
+React မှာ Element တွေကို return ပြန်တဲ့အခါ extra <div> တွေ အလကား မတိုးလာစေချင်ရင် Fragment ကို သုံးနိုင်ပါတယ်။
+
+```js
+
+return (
+  <>
+    <h1>Title</h1>
+    <p>Description</p>
+  </>
+);
+
+```
+JSX ဆိုတာ JavaScript ထဲမှာ HTML ရေးတာပါ။Logic တွေ သုံးချင်ရင် Curly Braces { } ထဲမှာ ရေးပါ။အပြင်ဘက်ဆုံးမှာ Element တစ်ခုတည်းနဲ့ အုပ်ထားဖို့ မမေ့ပါနဲ့။HTML အဟောင်းနဲ့ မတူဘဲ className နဲ့ camelCase တွေကို သတိထား သုံးပေးပါ။
+
+---
+
+
