@@ -8,7 +8,8 @@
   * [Short Conditionals](#Short-Conditionals)
   * [Three Array Methods](#Three-Array-Methods)
   * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript )
-  * [Promises&Async/Await](#Promises&Async/Await )
+  * [Promises&Async/Await](#Promises&Async/Await)
+  * [Optional Chaining (?.)&Nullish Coalescing (??)](#Optional-Chaining-(?.)&Nullish-Coalescing-(??))
 ---
 
 ## JavaScript Skills
@@ -721,6 +722,182 @@ async function fetchAll() {
 * Async / Await က Promise ကို **ပိုရှင်းလင်းစွာ** ရေးနိုင်စေပါတယ်
 * React / Next.js မှာ **Async / Await + try/catch** ကို အများဆုံး သုံးပါတယ်
 * API fetching, server actions, data loading အတွက် မဖြစ်မနေ သိထားရပါမယ်
+
+---
+
+
+# Optional Chaining (?.)&Nullish Coalescing (??)
+
+Optional Chaining (`?.`) နဲ့ Nullish Coalescing (`??`) က **modern JavaScript (ES2020)** features ဖြစ်ပြီး React / Next.js မှာ **runtime error မဖြစ်အောင်** ကာကွယ်ပေးနိုင်တဲ့ အရမ်းအရေးကြီးတဲ့ syntax တွေပါ။
+
+---
+
+## 1. Why do we need them?
+
+React မှာ API data တွေ fetch လုပ်တဲ့အခါ —
+
+* data မလာသေးခင် `undefined` ဖြစ်နိုင်တယ်
+* nested object တွေထဲက property ကို access လုပ်တဲ့အခါ error ဖြစ်နိုင်တယ်
+
+```js
+// ❌ Error ဖြစ်နိုင်
+console.log(user.profile.name);
+```
+
+`user` သို့မဟုတ် `profile` က `undefined` ဖြစ်နေရင် app crash ဖြစ်သွားပါမယ် ❌
+
+ဒီပြဿနာကို **Optional Chaining** နဲ့ ဖြေရှင်းပါတယ်။
+
+---
+
+## 2. Optional Chaining (?.) ဆိုတာဘာလဲ?
+
+Optional Chaining (`?.`) က
+👉 **object / array / function က null or undefined ဖြစ်ရင် error မထုတ်ဘဲ undefined ပြန်ပေးတဲ့ operator** ဖြစ်ပါတယ်။
+
+### Basic Example
+
+```js
+const user = {
+  profile: {
+    name: "Aung Aung",
+  },
+};
+
+console.log(user?.profile?.name); // "Aung Aung"
+console.log(user?.address?.city); // undefined (❌ error မဖြစ်)
+```
+
+---
+
+## 3. Without vs With Optional Chaining
+
+### ❌ Old Way (Defensive Code)
+
+```js
+if (user && user.profile && user.profile.name) {
+  console.log(user.profile.name);
+}
+```
+
+### ✅ Modern Way
+
+```js
+console.log(user?.profile?.name);
+```
+
+➡️ Code ပိုတို၊ ပိုဖတ်လွယ် 👍
+
+---
+
+## 4. Optional Chaining with Arrays
+
+```js
+const users = [];
+
+console.log(users[0]?.name); // undefined
+```
+
+Array empty ဖြစ်နေလည်း error မဖြစ်ပါဘူး။
+
+---
+
+## 5. Optional Chaining with Functions
+
+```js
+const user = {
+  sayHello: () => "Hello",
+};
+
+console.log(user.sayHello?.()); // "Hello"
+console.log(user.sayBye?.());   // undefined
+```
+
+Function မရှိရင်လည်း error မဖြစ်ပါဘူး။
+
+---
+
+## 6. Real Use Case in React
+
+```js
+function Profile({ user }) {
+  return (
+    <div>
+      <h1>{user?.profile?.name}</h1>
+      <p>{user?.profile?.email}</p>
+    </div>
+  );
+}
+```
+
+➡️ API data မလာသေးခင် render လုပ်လည်း crash မဖြစ်ပါဘူး ✅
+
+---
+
+## 7. Nullish Coalescing (??) ဆိုတာဘာလဲ?
+
+Nullish Coalescing (`??`) က
+👉 **value က null သို့မဟုတ် undefined ဖြစ်မှသာ default value သုံးပေးတဲ့ operator** ဖြစ်ပါတယ်။
+
+### Basic Example
+
+```js
+const username = null;
+
+console.log(username ?? "Guest"); // "Guest"
+```
+
+---
+
+## 8. ?? vs || (Important Difference)
+
+### Using OR (||)
+
+```js
+const count = 0;
+console.log(count || 10); // 10 ❌ (မလိုချင်တဲ့ result)
+```
+
+### Using Nullish Coalescing (??)
+
+```js
+const count = 0;
+console.log(count ?? 10); // 0 ✅ (correct)
+```
+
+➡️ `||` က falsy values (`0`, `""`, `false`) ကိုလည်း default သတ်မှတ်တယ်
+➡️ `??` က **null / undefined** သာ default သတ်မှတ်တယ်
+
+---
+
+## 9. Using ?? in React Components
+
+```js
+function Counter({ value }) {
+  return <p>Count: {value ?? 0}</p>;
+}
+```
+
+`value` မပေးရင် 0 ပြမယ်၊ 0 ကိုပေးရင်လည်း 0 ကိုပဲပြမယ် ✅
+
+---
+
+## 10. Combining ?. and ?? (Very Common)
+
+```js
+const city = user?.address?.city ?? "Unknown";
+```
+
+➡️ Safe access + default value = Perfect combo 🔥
+
+---
+
+## Summary (အနှစ်ချုပ်)
+
+* `?.` → null / undefined ဖြစ်နိုင်တဲ့ object ကို **safe access** လုပ်ဖို့
+* `??` → null / undefined ဖြစ်မှသာ **default value** ပေးဖို့
+* React / Next.js မှာ API data render လုပ်တဲ့အခါ မဖြစ်မနေ သုံးသင့်
+* `||` ထက် `??` က **ပိုမှန်ကန်တဲ့ default logic** ဖြစ်တတ်
 
 ---
 
