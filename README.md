@@ -8,6 +8,7 @@
   * [Short Conditionals](#Short-Conditionals)
   * [Three Array Methods](#Three-Array-Methods)
   * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript )
+  * [Promises & Async / Await ](#Promises-&-Async-/-Await )
 ---
 
 ## JavaScript Skills
@@ -534,4 +535,192 @@ const copy = { ...user }; // ✅ new object
 * **Spread Operator** → React state ကို safe update လုပ်နိုင်
 ---
 
+
+# Promises & Async / Await 
+
+Promises နဲ့ Async / Await က JavaScript မှာ **asynchronous code** (API call, data fetching, timer, etc.) တွေကို handle လုပ်ဖို့ အရေးကြီးဆုံး concept တွေပါ။ React / Next.js မှာ API ခေါ်တဲ့အခါ မဖြစ်မနေ သိထားရပါမယ်။
+
+---
+
+## 1. What is Asynchronous JavaScript?
+
+JavaScript က **single-threaded** language ဖြစ်ပါတယ်။ ဒါပေမဲ့ API call လို အချိန်ယူတဲ့ အလုပ်တွေကို asynchronous နဲ့ run လုပ်နိုင်ပါတယ်။
+
+ဥပမာ –
+
+* API မှ data ယူခြင်း
+* setTimeout
+* File / Database access
+
+အဲ့ဒီလိုအလုပ်တွေကို **Promise / Async-Await** နဲ့ ကိုင်တွယ်ပါတယ်။
+
+---
+
+## 2. Promise ဆိုတာဘာလဲ?
+
+Promise ဆိုတာ **အနာဂတ်မှာ result တစ်ခု return ပြန်ပေးမယ့် object** တစ်ခုပါ။
+
+Promise မှာ state 3 ခုရှိပါတယ် –
+
+* **Pending** → အလုပ်လုပ်နေဆဲ
+* **Fulfilled** → အောင်မြင်ပြီး result ရပြီ
+* **Rejected** → error ဖြစ်သွားပြီ
+
+### Basic Promise Example
+
+```js
+const fetchData = new Promise((resolve, reject) => {
+  const success = true;
+
+  if (success) {
+    resolve("Data fetched successfully");
+  } else {
+    reject("Something went wrong");
+  }
+});
+```
+
+### Using `.then()` and `.catch()`
+
+```js
+fetchData
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+➡️ Promise chain လုပ်ရင် code က အနည်းငယ်ရှုပ်နိုင်ပါတယ်။
+
+---
+
+## 3. Promise Chaining
+
+```js
+fetch("https://api.example.com/users")
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.error(err));
+```
+
+❌ Problem: `.then()` များလာရင် **readability မကောင်းတော့** ပါဘူး။
+
+ဒီအတွက် Async / Await ကို သုံးပါတယ်။
+
+---
+
+## 4. Async / Await ဆိုတာဘာလဲ?
+
+Async / Await က Promise ကို **sync code လို ဖတ်လို့ရအောင်** ရေးနိုင်စေပါတယ်။
+
+* `async` → function တစ်ခုကို async function ဖြစ်အောင်လုပ်
+* `await` → Promise ပြီးဆုံးတဲ့အထိ စောင့်
+
+### Basic Async / Await Example
+
+```js
+async function fetchUser() {
+  const response = await fetch("https://api.example.com/user");
+  const data = await response.json();
+  console.log(data);
+}
+```
+
+➡️ Code က `.then()` ထက် ပိုရှင်းပါတယ်။
+
+---
+
+## 5. Error Handling with try / catch
+
+Async / Await မှာ error ကို `try...catch` နဲ့ handle လုပ်ပါတယ်။
+
+```js
+async function fetchUser() {
+  try {
+    const res = await fetch("https://api.example.com/user");
+    const data = await res.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching user", error);
+  }
+}
+```
+
+---
+
+## 6. Using Async / Await in React (useEffect)
+
+React မှာ API call ကို `useEffect` ထဲမှာ အများဆုံး သုံးပါတယ်။
+
+```js
+import { useEffect, useState } from "react";
+
+function Users() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const res = await fetch("https://api.example.com/users");
+        const data = await res.json();
+        setUsers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchUsers();
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+---
+
+## 7. Multiple Promises (Promise.all)
+
+တစ်ချိန်တည်း API များစွာ ခေါ်ချင်ရင် `Promise.all()` သုံးပါတယ်။
+
+```js
+async function fetchAll() {
+  const [users, posts] = await Promise.all([
+    fetch("/users").then((r) => r.json()),
+    fetch("/posts").then((r) => r.json()),
+  ]);
+
+  console.log(users, posts);
+}
+```
+
+---
+
+## 8. Promise vs Async / Await (Comparison)
+
+| Feature        | Promise (.then) | Async / Await |
+| -------------- | --------------- | ------------- |
+| Readability    | Medium          | High          |
+| Error Handling | .catch()        | try / catch   |
+| React Usage    | Rare now        | Very common   |
+| Clean Code     | ❌               | ✅             |
+
+---
+
+## Summary (အနှစ်ချုပ်)
+
+* Promise က asynchronous result ကို ကိုယ်စားပြုတဲ့ object ဖြစ်ပါတယ်
+* `.then()` / `.catch()` နဲ့ Promise ကို handle လုပ်နိုင်ပါတယ်
+* Async / Await က Promise ကို **ပိုရှင်းလင်းစွာ** ရေးနိုင်စေပါတယ်
+* React / Next.js မှာ **Async / Await + try/catch** ကို အများဆုံး သုံးပါတယ်
+* API fetching, server actions, data loading အတွက် မဖြစ်မနေ သိထားရပါမယ်
+
+---
 
