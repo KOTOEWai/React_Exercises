@@ -10,6 +10,7 @@
   * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript )
   * [Promises&Async/Await](#Promises&Async/Await)
   * [Optional Chaining (?.)&Nullish Coalescing (??)](#Optional-Chaining-(?.)&Nullish-Coalescing-(??))
+  * [ES Modules](#ES-Modules)
 ---
 
 ## JavaScript Skills
@@ -898,6 +899,205 @@ const city = user?.address?.city ?? "Unknown";
 * `??` → null / undefined ဖြစ်မှသာ **default value** ပေးဖို့
 * React / Next.js မှာ API data render လုပ်တဲ့အခါ မဖြစ်မနေ သုံးသင့်
 * `||` ထက် `??` က **ပိုမှန်ကန်တဲ့ default logic** ဖြစ်တတ်
+
+---
+
+# ES Modules
+
+ES Modules (ESM) ဆိုတာ JavaScript မှာ **code ကို file အလိုက် ခွဲရေးပြီး ပြန်အသုံးချနိုင်အောင်** လုပ်ပေးတဲ့ modern module system ဖြစ်ပါတယ်။ React / Next.js မှာ **default standard** အဖြစ် အသုံးပြုနေပါတယ်။
+
+---
+
+## 1. Why ES Modules?
+
+Project ကြီးလာတာနဲ့အမျှ file တစ်ဖိုင်ထဲမှာ code အားလုံးရေးရင် —
+
+* မဖတ်လွယ်
+* maintain ခက်
+* bug ပြန်ရှာရခက်
+
+ES Modules က code ကို **reusable, maintainable, scalable** ဖြစ်အောင် ကူညီပေးပါတယ်။
+
+---
+
+## 2. Export ဆိုတာဘာလဲ?
+
+`export` က **ဒီ file ထဲက code ကို အပြင်က file တွေမှာ သုံးလို့ရအောင် ထုတ်ပေးခြင်း** ဖြစ်ပါတယ်။
+
+ES Modules မှာ export အမျိုးအစား ၂ မျိုးရှိပါတယ် –
+
+* **Named Export**
+* **Default Export**
+
+---
+
+## 3. Named Export
+
+### Syntax
+
+```js
+export const name = "Aung Aung";
+export const age = 20;
+```
+
+or
+
+```js
+const name = "Aung Aung";
+const age = 20;
+
+export { name, age };
+```
+
+### Import Named Exports
+
+```js
+import { name, age } from "./user";
+```
+
+⚠️ **Name တူရပါမယ်** (rename ချင်ရင် `as` သုံးနိုင်)
+
+```js
+import { name as userName } from "./user";
+```
+
+---
+
+## 4. Default Export
+
+File တစ်ဖိုင်မှာ **default export တစ်ခုပဲ ရနိုင်ပါတယ်**။
+
+### Syntax
+
+```js
+export default function User() {
+  return "User Component";
+}
+```
+
+or
+
+```js
+const User = () => "User Component";
+export default User;
+```
+
+### Import Default Export
+
+```js
+import User from "./User";
+```
+
+✅ Name ကို ကြိုက်သလိုပေးလို့ရပါတယ်
+
+---
+
+## 5. Named vs Default (Comparison)
+
+| Feature          | Named Export | Default Export |
+| ---------------- | ------------ | -------------- |
+| Exports per file | Multiple     | Only one       |
+| Import name      | Must match   | Any name       |
+| Auto-complete    | Better       | Normal         |
+| React usage      | utils, hooks | components     |
+
+---
+
+## 6. Exporting React Components
+
+### Recommended Pattern
+
+```js
+export default function Button() {
+  return <button>Click</button>;
+}
+```
+
+Usage:
+
+```js
+import Button from "@/components/Button";
+```
+
+---
+
+## 7. Exporting Utilities / Helpers
+
+```js
+export function formatPrice(price) {
+  return `${price} MMK`;
+}
+
+export function formatDate(date) {
+  return new Date(date).toLocaleDateString();
+}
+```
+
+Import:
+
+```js
+import { formatPrice, formatDate } from "@/utils/format";
+```
+
+---
+
+## 8. Re-exporting (Barrel Files)
+
+Project ကြီးရင် import လိုင်းတွေရှုပ်နိုင်ပါတယ်။
+
+```js
+// components/index.js
+export { default as Button } from "./Button";
+export { default as Card } from "./Card";
+```
+
+Usage:
+
+```js
+import { Button, Card } from "@/components";
+```
+
+➡️ Cleaner imports 👍
+
+---
+
+## 9. Common Mistakes
+
+❌ Named export ကို default import နဲ့ ခေါ်ခြင်း
+
+```js
+import User from "./user"; // Error
+```
+
+✅ Correct
+
+```js
+import { User } from "./user";
+```
+
+---
+
+## 10. ES Modules in Node.js / Next.js
+
+* Next.js → ES Modules **default support**
+* Node.js → `"type": "module"` in `package.json`
+
+```json
+{
+  "type": "module"
+}
+```
+
+---
+
+## Summary (အနှစ်ချုပ်)
+
+* ES Modules = modern JavaScript module system
+* `export` → code ကို အပြင်မှာ သုံးလို့ရအောင် ထုတ်ပေး
+* `import` → အခြား file က code ကို ယူသုံး
+* React Components → `export default`
+* Utils / Hooks → `named export`
+* Clean architecture အတွက် မဖြစ်မနေ သိထားရမယ်
 
 ---
 
