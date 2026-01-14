@@ -1662,15 +1662,47 @@ setUser({ ...user, age: 30 });
 
 ## 1. Side Effect ဆိုတာဘာလဲ?
 
-React component ရဲ့ **pure render logic မဟုတ်တဲ့ အလုပ်တွေ** ကို side effects လို့ ခေါ်ပါတယ်။
+React component ရဲ့ **pure render logic (Component တစ်ခုဟာ သူ့ဆီကို ပေးလိုက်တဲ့ Inputs (Props, State, Context) အပေါ်မှာပဲ မူတည်ပြီး Output (JSX) ကို ထုတ်ပေးရမယ်ဆိုတဲ့ အယူအဆဖြစ်ပါတယ်။) မဟုတ်တဲ့ အလုပ်တွေ** ကို side effects လို့ ခေါ်ပါတယ်။
 
 ဥပမာ –
 
 * API call လုပ်ခြင်း
+```js
+useEffect(() => {
+  fetch('https://api.example.com/data')
+    .then(res => res.json())
+    .then(data => setData(data));
+}, []); // [] ပါလို့ တစ်ကြိမ်ပဲ ခေါ်ပါမယ်
+```
 * document title ပြောင်းခြင်း
+```js
+   useEffect(() => {
+  document.title = `နှိပ်လိုက်သည့်အကြိမ် - ${count}`;
+}, [count]); // count ပြောင်းတိုင်း title လိုက်ပြောင်းပေးမယ်
+```
 * event listener တပ်ခြင်း
-* setTimeout / setInterval သုံးခြင်း
 
+```js
+useEffect(() => {
+  const handleResize = () => console.log(window.innerWidth);
+  
+  window.addEventListener('resize', handleResize);
+
+  // Cleanup: Component ပျောက်သွားရင် listener ကို ပြန်ဖြုတ်မယ်
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+```
+
+* setTimeout / setInterval သုံးခြင်း
+```js
+useEffect(() => {
+  const timer = setTimeout(() => {
+    console.log("၅ စက္ကန့် ပြည့်သွားပါပြီ");
+  }, 5000);
+
+  return () => clearTimeout(timer); // Cleanup
+}, []);
+```
 ---
 
 ## 2. Basic Syntax
@@ -1825,5 +1857,154 @@ React 18 မှာ unnecessary effects တွေကို ရှောင်သ�
 ---
 
 
+# useContext Hook (React)
+
+`useContext` ဆိုတာ React Hooks ထဲက **prop drilling ကိုရှောင်ပြီး data ကို global အနေနဲ့ share လုပ်ဖို့** အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Theme, Auth user, language, settings စတဲ့ data တွေကို component များစွာမှာ သုံးရတဲ့အခါ အရမ်းအသုံးဝင်ပါတယ်။
+
+---
+
+## 1. Problem: Prop Drilling
+
+Component တစ်ခုက data ကို အောက်ခြေ component တွေထိ ဆက်တိုက် ပို့ရတဲ့အခါ **prop drilling** ဖြစ်ပါတယ်။
+
+```jsx
+<App>
+  <Layout user={user}>
+    <Header user={user} />
+  </Layout>
+</App>
+```
+
+➡️ Component များလာတာနဲ့ code ရှုပ်လာပါတယ် ❌
+
+---
+
+## 2. Solution: Context API
+
+React Context က data ကို **tree တစ်ခုလုံးမှာ share** လုပ်နိုင်အောင် ကူညီပေးပါတယ်။
+
+* Provider → data ပေး
+* Consumer / useContext → data ယူ
+
+---
+
+## 3. Creating Context
+
+```js
+import { createContext } from "react";
+
+export const ThemeContext = createContext();
+```
+
+---
+
+## 4. Providing Context Value
+
+```jsx
+import { ThemeContext } from "./ThemeContext";
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Layout />
+    </ThemeContext.Provider>
+  );
+}
+```
+
+➡️ Provider ထဲက children အားလုံးက value ကို access လုပ်နိုင်ပါတယ် ✅
+
+---
+
+## 5. Consuming Context with useContext
+
+```jsx
+import { useContext } from "react";
+import { ThemeContext } from "./ThemeContext";
+
+function Header() {
+  const theme = useContext(ThemeContext);
+
+  return <h1>Current Theme: {theme}</h1>;
+}
+```
+
+---
+
+## 6. useContext with Object Value
+
+```jsx
+<ThemeContext.Provider value={{ theme: "dark", toggleTheme }}>
+```
+
+```js
+const { theme, toggleTheme } = useContext(ThemeContext);
+```
+
+➡️ Real projects မှာ object value ကို အများဆုံး သုံးပါတယ်။
+
+---
+
+## 7. Example: Auth Context
+
+```jsx
+const AuthContext = createContext();
+
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+```
+
+Usage:
+
+```js
+const { user, setUser } = useContext(AuthContext);
+```
+
+---
+
+## 8. useContext vs Props
+
+| Feature       | useContext    | Props          |
+| ------------- | ------------- | -------------- |
+| Prop drilling | ❌ Avoided     | ❌ Exists       |
+| Scope         | Global (tree) | Parent → child |
+| Best for      | Theme, Auth   | Component data |
+
+---
+
+## 9. Common Mistakes
+
+❌ Overusing Context
+
+* Frequently changing data (animations, form inputs)
+
+❌ Using Context instead of state management blindly
+
+---
+
+## 10. When to use useContext
+
+✅ Theme (dark / light)
+✅ Auth user info
+✅ Language (i18n)
+✅ App-wide settings
+
+❌ Highly dynamic data
+
+---
 
 
+* `useContext` = global state sharing
+* Solves prop drilling
+* Use Provider + useContext
+* Perfect for app-wide data
+* Not a replacement for all state management
+
+---
