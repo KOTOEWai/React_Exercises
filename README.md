@@ -1490,12 +1490,340 @@ function Counter() {
     </div>
   );
 }
-```
-
 
 * State က Component ရဲ့ အတွင်းပိုင်း data ဖြစ်တယ်။
 
 * State ပြောင်းရင် UI က Auto update ဖြစ်တယ်။
 
 * State ကို တိုက်ရိုက်မပြင်ရဘူး (count = 5 လို့ မရေးရဘူး)၊ အမြဲတမ်း set function (setCount(5)) ကိုပဲ သုံးရမယ်။
+
+
+
+---
+
+# useState Hook 
+
+`useState` ဆိုတာ React Hooks ထဲက **အခြေခံအကျဆုံးနဲ့ အရေးကြီးဆုံး Hook** ဖြစ်ပြီး component ထဲမှာ **state (data)** ကို သိမ်းဆည်းပြီး update လုပ်ဖို့ အသုံးပြုပါတယ်။ Functional Components တွေမှာ state ကို သုံးနိုင်အောင် React 16.8 မှ စတင်မိတ်ဆက်ခဲ့ပါတယ်။
+
+---
+
+## 1. Why do we need useState?
+
+JavaScript variable တစ်ခုကို ပြောင်းလိုက်ရင် UI မပြောင်းပါဘူး ❌
+
+React မှာ UI ကို ပြောင်းချင်ရင် **state change** လုပ်ရပါတယ်။
+
+```js
+let count = 0;
+count = count + 1; // UI မပြောင်း
 ```
+
+ဒီပြဿနာကို `useState` နဲ့ ဖြေရှင်းပါတယ် ✅
+
+---
+
+## 2. Basic Syntax
+
+```js
+import { useState } from "react";
+
+const [state, setState] = useState(initialValue);
+```
+
+* `state` → လက်ရှိတန်ဖိုး
+* `setState` → state ကို update လုပ်တဲ့ function
+* `initialValue` → စတင်တန်ဖိုး
+
+---
+
+## 3. Simple Counter Example
+
+```jsx
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </div>
+  );
+}
+```
+
+➡️ `setCount` ကို ခေါ်လိုက်တာနဲ့ component က **re-render** ဖြစ်ပြီး UI ပြောင်းပါတယ်။
+
+---
+
+## 4. Updating State Correctly
+
+### ❌ Wrong Way
+
+```js
+setCount(count + 1);
+setCount(count + 1);
+```
+
+### ✅ Correct Way (Functional Update)
+
+```js
+setCount(prev => prev + 1);
+setCount(prev => prev + 1);
+```
+
+➡️ Previous state ကို အခြေခံပြီး update လုပ်တဲ့အခါ **functional form** ကို သုံးပါ။
+
+---
+
+## 5. useState with Objects
+
+```jsx
+const [user, setUser] = useState({
+  name: "Aung Aung",
+  age: 20,
+});
+
+setUser({
+  ...user,
+  age: 21,
+});
+```
+
+⚠️ Object state ကို update လုပ်တဲ့အခါ **spread operator (`...`) မဖြစ်မနေ သုံးရပါမယ်**။
+
+---
+
+## 6. useState with Arrays
+
+```jsx
+const [todos, setTodos] = useState([]);
+
+setTodos([...todos, "Learn React"]);
+```
+
+➡️ State ကို **mutate မလုပ်ဘဲ** new array ပြန်ဖန်တီးရပါတယ်။
+
+---
+
+## 7. Multiple useState Hooks
+
+Component တစ်ခုထဲမှာ `useState` ကို အကြိမ်များစွာ သုံးနိုင်ပါတယ်။
+
+```jsx
+const [name, setName] = useState("");
+const [age, setAge] = useState(0);
+```
+
+---
+
+## 8. Common Mistakes
+
+❌ Direct mutation
+
+```js
+user.age = 30;
+setUser(user); // ❌
+```
+
+✅ Correct
+
+```js
+setUser({ ...user, age: 30 });
+```
+
+---
+
+## 9. useState vs Props
+
+| Feature  | useState  | Props        |
+| -------- | --------- | ------------ |
+| Mutable  | Yes       | No           |
+| Owned by | Component | Parent       |
+| Purpose  | UI state  | Data passing |
+
+---
+
+
+* `useState` က component ရဲ့ data ကို manage လုပ်ဖို့ သုံး
+* State change → UI re-render
+* Object / Array state update လုပ်ရင် spread operator သုံး
+* Previous state ကို သုံးတဲ့အခါ functional update သုံး
+
+---
+
+
+# useEffect Hook (React)
+
+`useEffect` ဆိုတာ React Hooks ထဲက **side effects** တွေကို handle လုပ်ဖို့အတွက် အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Data fetching, DOM interaction, subscriptions, timers စတာတွေကို component render ပြီးနောက် run ချင်တဲ့အခါ `useEffect` ကို သုံးပါတယ်။
+
+---
+
+## 1. Side Effect ဆိုတာဘာလဲ?
+
+React component ရဲ့ **pure render logic မဟုတ်တဲ့ အလုပ်တွေ** ကို side effects လို့ ခေါ်ပါတယ်။
+
+ဥပမာ –
+
+* API call လုပ်ခြင်း
+* document title ပြောင်းခြင်း
+* event listener တပ်ခြင်း
+* setTimeout / setInterval သုံးခြင်း
+
+---
+
+## 2. Basic Syntax
+
+```js
+import { useEffect } from "react";
+
+useEffect(() => {
+  // side effect code
+}, [dependencies]);
+```
+
+* Callback function → effect logic
+* Dependency array → effect ကို ဘယ်အချိန် run မလဲ ဆုံးဖြတ်
+
+---
+
+## 3. useEffect Without Dependency Array
+
+```js
+useEffect(() => {
+  console.log("Component rendered");
+});
+```
+
+➡️ Component render **တိုင်း run** ဖြစ်ပါတယ် (re-render အားလုံး) ❌
+
+---
+
+## 4. useEffect with Empty Dependency Array
+
+```js
+useEffect(() => {
+  console.log("Component mounted");
+}, []);
+```
+
+➡️ Component **mount ဖြစ်တဲ့အချိန်တစ်ခါပဲ run** ဖြစ်ပါတယ် ✅
+
+API call တွေအတွက် အများဆုံး သုံးပါတယ်။
+
+---
+
+## 5. useEffect with Dependencies
+
+```jsx
+useEffect(() => {
+  console.log("Count changed", count);
+}, [count]);
+```
+
+➡️ `count` ပြောင်းတဲ့အချိန်တိုင်း effect run ဖြစ်ပါတယ်။
+
+---
+```
+ပုံစံ,                                                    အလုပ်လုပ်ပုံ
+--------------------------------------------------------------------------------------------------------------------
+Array မပါလျှင် useEffect(() => {...}),                    Render ဖြစ်တိုင်း (ခဏခဏ) အလုပ်လုပ်မယ်။                       
+
+"Array အလွတ် useEffect(() => {...}, [])",              Component စတင်ပေါ်လာချိန် (Mount) တစ်ကြိမ်တည်း ပဲ အလုပ်လုပ်မယ်။  
+
+"Variable ပါလျှင် useEffect(() => {...}, [count])",       Component ပေါ်ချိန်နဲ့ count တန်ဖိုး ပြောင်းလဲတိုင်း အလုပ်လုပ်မယ်။
+```
+
+## 6. Data Fetching Example
+
+```jsx
+import { useEffect, useState } from "react";
+
+function Users() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const res = await fetch("https://api.example.com/users");
+      const data = await res.json();
+      setUsers(data);
+    }
+
+    fetchUsers();
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+---
+
+## 7. Cleanup Function
+
+Effect ထဲမှာ return ပြန်ပေးတဲ့ function ကို **cleanup function** လို့ ခေါ်ပါတယ်။
+
+```js
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log("Running...");
+  }, 1000);
+
+  return () => {
+    clearInterval(timer);
+  };
+}, []);
+```
+
+➡️ Component unmount ဖြစ်တဲ့အခါ cleanup run ဖြစ်ပါတယ် ✅
+
+---
+
+## 8. useEffect vs useState
+
+| Feature  | useEffect                  | useState         |
+| -------- | -------------------------- | ---------------- |
+| Purpose  | Side effects               | State management |
+| Triggers | Render / dependency change | setState         |
+| Returns  | Optional cleanup           | State + setter   |
+
+---
+
+## 9. Common Mistakes
+
+❌ Dependency မထည့်ခြင်း
+
+```js
+useEffect(() => {
+  setCount(count + 1);
+}, []); // ❌ stale value
+```
+
+✅ Correct
+
+```js
+useEffect(() => {
+  setCount(prev => prev + 1);
+}, []);
+```
+
+---
+
+## 10. When NOT to use useEffect
+
+* Simple derived state
+* Props → UI mapping only
+
+React 18 မှာ unnecessary effects တွေကို ရှောင်သင့်ပါတယ်။
+
+---
+
+
+
+
