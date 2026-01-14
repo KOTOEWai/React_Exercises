@@ -1446,3 +1446,56 @@ Data ပြောင်းလိုက်တာနဲ့ UI က အလိုအ�
 စာလုံးမှားတဲ့ စာမျက်နှာကိုပဲ ရှာပြီး ခဲဖျက်နဲ့ဖျက်၊ အမှန်ပြန်ရေးတာက Virtual DOM ရဲ့ အလုပ်လုပ်ပုံမျိုး ဖြစ်ပါတယ်။
 ```
 ---
+
+# State
+```
+
+
+React မှာ State ဆိုတာ Component တစ်ခုရဲ့ ကိုယ်ပိုင်အချက်အလက် (Internal Data) ကို 
+သိမ်းဆည်းထားတဲ့ နေရာတစ်ခု ဖြစ်ပါတယ်။
+
+သူ့ကို အရိုးရှင်းဆုံး ရှင်းပြရရင် Component တစ်ခုရဲ့ "မှတ်ဉာဏ်" (Memory) လို့ ခေါ်နိုင်ပါတယ်။
+
+၁။ State ရဲ့ အဓိက အလုပ်လုပ်ပုံ
+State ထဲမှာ ရှိတဲ့ Data တစ်ခုခု ပြောင်းလဲသွားတာနဲ့ React က အဲဒီ Component ကို Re-render လုပ်ပေးပါတယ်။ 
+ဆိုလိုတာက Screen ပေါ်မှာ UI ကို အလိုအလျောက် Update လုပ်ပေးတာပါ။
+
+၂။ Functional Component မှာ State ကို ဘယ်လိုသုံးမလဲ?
+Functional Component မှာ State သုံးဖို့အတွက် useState ဆိုတဲ့ Hook ကို သုံးရပါတယ်။
+
+```js
+const [stateName, setStateFunction] = useState(initialValue);
+
+```
+
+၃။ ဥပမာ - Counter (ဂဏန်းတိုးခြင်း)
+
+ဒီဥပမာမှာ count ဆိုတဲ့ State က လက်ရှိဂဏန်းကို မှတ်ထားမှာဖြစ်ပြီး၊ setCount က အဲဒီဂဏန်းကို ပြောင်းလဲပေးမှာပါ။
+
+```js
+import React, { useState } from 'react';
+
+function Counter() {
+  // count ဆိုတဲ့ state ကို 0 နဲ့ စတင်သတ်မှတ်တယ်
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>လက်ရှိအရေအတွက်: {count}</p>
+      
+      {/* ခလုတ်နှိပ်လိုက်ရင် setCount ကနေတစ်ဆင့် state ကို ပြောင်းတယ် */}
+      <button onClick={() => setCount(count + 1)}>
+        တိုးရန်
+      </button>
+    </div>
+  );
+}
+```
+
+
+* State က Component ရဲ့ အတွင်းပိုင်း data ဖြစ်တယ်။
+
+* State ပြောင်းရင် UI က Auto update ဖြစ်တယ်။
+
+* State ကို တိုက်ရိုက်မပြင်ရဘူး (count = 5 လို့ မရေးရဘူး)၊ အမြဲတမ်း set function (setCount(5)) ကိုပဲ သုံးရမယ်။
+```
