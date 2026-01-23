@@ -2008,3 +2008,280 @@ const { user, setUser } = useContext(AuthContext);
 * Not a replacement for all state management
 
 ---
+
+
+
+# useRef Hook 
+
+`useRef` ဆိုတာ React Hooks ထဲက **DOM elements ကို တိုက်ရိုက် access လုပ်ဖို့** နဲ့ **re-render မဖြစ်ဘဲ value ကို သိမ်းထားဖို့** အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Focus control, timers, previous values စတာတွေမှာ အရမ်းအသုံးဝင်ပါတယ်။
+
+---
+
+## 1. Why useRef?
+
+`useState` နဲ့ value ပြောင်းတိုင်း component က re-render ဖြစ်ပါတယ်။
+
+တစ်ချို့အခြေအနေတွေမှာ —
+
+* UI မပြောင်းချင်
+* value ကို သိမ်းထားချင်
+
+ဆိုရင် `useRef` ကို သုံးပါတယ်။
+
+---
+
+## 2. Basic Syntax
+
+```js
+import { useRef } from "react";
+
+const ref = useRef(initialValue);
+```
+
+* `ref.current` ထဲမှာ value သိမ်းပါတယ်
+* `ref.current` ပြောင်းလဲရင် **re-render မဖြစ်ပါဘူး**
+
+---
+
+## 3. Accessing DOM Elements
+
+```jsx
+import { useRef } from "react";
+
+function InputFocus() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputRef} />
+      <button onClick={focusInput}>Focus</button>
+    </>
+  );
+}
+```
+
+➡️ DOM ကို **querySelector မသုံးဘဲ** safe access လုပ်နိုင်ပါတယ် ✅
+
+---
+
+## 4. useRef vs useState
+
+| Feature          | useRef              | useState |
+| ---------------- | ------------------- | -------- |
+| Causes re-render | ❌ No                | ✅ Yes    |
+| Stores value     | ✅ Yes               | ✅ Yes    |
+| UI update        | ❌ No                | ✅ Yes    |
+| Best for         | DOM, mutable values | UI state |
+
+---
+
+## 5. Storing Mutable Values (Timer Example)
+
+```js
+const timerRef = useRef(null);
+
+useEffect(() => {
+  timerRef.current = setInterval(() => {
+    console.log("Running...");
+  }, 1000);
+
+  return () => clearInterval(timerRef.current);
+}, []);
+```
+
+➡️ Timer ID ကို state မသုံးဘဲ သိမ်းထားနိုင်ပါတယ် 👍
+
+---
+
+## 6. Keeping Previous Value
+
+```js
+function Counter({ count }) {
+  const prevCount = useRef(count);
+
+  useEffect(() => {
+    prevCount.current = count;
+  }, [count]);
+
+  return (
+    <p>
+      Now: {count}, Before: {prevCount.current}
+    </p>
+  );
+}
+```
+
+➡️ Previous props / state ကို သိမ်းထားနိုင်ပါတယ် ✅
+
+---
+
+## 7. Common Mistakes
+
+❌ UI update အတွက် useRef သုံးခြင်း
+
+```js
+ref.current = ref.current + 1; // UI မပြောင်း
+```
+
+✅ UI ပြောင်းချင်ရင် `useState` သုံးပါ
+
+---
+
+## 8. When to use useRef
+
+✅ DOM focus / scroll
+✅ Timers (setInterval / setTimeout)
+✅ External libraries
+✅ Previous value storage
+
+❌ UI rendering logic
+
+---
+
+
+* `useRef` = mutable value storage without re-render
+* `.current` ထဲမှာ value သိမ်း
+* DOM access အတွက် perfect
+* UI state အတွက် မသုံး
+
+---
+# useMemo Hook (React)
+
+`useMemo` ဆိုတာ React Hooks ထဲက **expensive calculation တွေကို memoize (cache) လုပ်ပြီး performance optimize** ဖို့ အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Re-render ဖြစ်တိုင်း calculation ပြန်မလုပ်ဘဲ dependency ပြောင်းမှသာ ပြန်တွက်စေပါတယ်။
+
+---
+
+## 1. Why useMemo?
+
+Component re-render ဖြစ်တိုင်း function / calculation တွေ ပြန် run ဖြစ်ရင် —
+
+* Performance ကျ
+* UI lag ဖြစ်
+
+အထူးသဖြင့် **large arrays, heavy calculations** တွေမှာ `useMemo` ကို သုံးသင့်ပါတယ်။
+
+---
+
+## 2. Basic Syntax
+
+
+```js
+import { useMemo } from "react";
+
+const memoizedValue = useMemo(() => {
+  return expensiveCalculation(data);
+}, [data]);
+```
+
+* First argument → calculation function
+* Second argument → dependency array
+
+
+---
+
+## 3. Simple Example (Without useMemo)
+
+```jsx
+function Sum({ numbers }) {
+  const total = numbers.reduce((sum, n) => sum + n, 0);
+  return <p>Total: {total}</p>;
+}
+```
+
+➡️ Parent re-render ဖြစ်တိုင်း `reduce` ပြန် run ဖြစ်ပါတယ် ❌
+
+---
+
+## 4. Optimized with useMemo
+
+```jsx
+import { useMemo } from "react";
+
+function Sum({ numbers }) {
+  const total = useMemo(() => {
+    return numbers.reduce((sum, n) => sum + n, 0);
+  }, [numbers]);
+
+  return <p>Total: {total}</p>;
+}
+```
+
+➡️ `numbers` မပြောင်းရင် calculation **cache ထဲက value ကိုပဲ သုံးပါတယ်** ✅
+
+---
+
+## 5. useMemo with Filtering (Common React Case)
+
+```jsx
+const filteredUsers = useMemo(() => {
+  return users.filter(user => user.active);
+}, [users]);
+```
+
+➡️ Large list filtering မှာ performance ကောင်းပါတယ် 👍
+
+---
+
+## 6. useMemo vs Normal Variable
+
+| Feature                   | Normal Variable | useMemo |
+| ------------------------- | --------------- | ------- |
+| Recalculated on re-render | ✅ Yes           | ❌ No    |
+| Cached value              | ❌ No            | ✅ Yes   |
+| Performance optimized     | ❌               | ✅       |
+
+---
+
+## 7. useMemo vs useCallback
+
+| Feature  | useMemo           | useCallback    |
+| -------- | ----------------- | -------------- |
+| Returns  | Value             | Function       |
+| Purpose  | Cache calculation | Cache function |
+| Use case | Derived data      | Event handlers |
+
+---
+
+## 8. Common Mistakes
+
+❌ Overusing useMemo
+
+```js
+const name = useMemo(() => "Aung Aung", []); // ❌ unnecessary
+```
+
+➡️ Cheap calculation တွေအတွက် မလိုအပ်ပါဘူး
+
+---
+
+## 9. When to use useMemo
+
+✅ Expensive calculations
+✅ Large lists (filter, sort, map)
+✅ Derived data from props/state
+
+❌ Simple values
+❌ Premature optimization
+
+---
+
+
+* `useMemo` = memoize value
+* Dependency မပြောင်းရင် calculation ပြန်မလုပ်
+* Performance optimization အတွက် သုံး
+* Overuse မလုပ်
+
+---
+
+✅ Best Practices
+
+* Measure performance first
+* Use only when needed
+* Keep dependency array accurate
+---
+
+
