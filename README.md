@@ -1472,17 +1472,15 @@ React မှာ State ဆိုတာ Component တစ်ခုရဲ့ ကိ�
 
 သူ့ကို အရိုးရှင်းဆုံး ရှင်းပြရရင် Component တစ်ခုရဲ့ "မှတ်ဉာဏ်" (Memory) လို့ ခေါ်နိုင်ပါတယ်။
 
-၁။ State ရဲ့ အဓိက အလုပ်လုပ်ပုံ
+ ၁။ State ရဲ့ အဓိက အလုပ်လုပ်ပုံ
 State ထဲမှာ ရှိတဲ့ Data တစ်ခုခု ပြောင်းလဲသွားတာနဲ့ React က အဲဒီ Component ကို Re-render လုပ်ပေးပါတယ်။ 
 ဆိုလိုတာက Screen ပေါ်မှာ UI ကို အလိုအလျောက် Update လုပ်ပေးတာပါ။
 
-၂။ Functional Component မှာ State ကို ဘယ်လိုသုံးမလဲ?
+ ၂။ Functional Component မှာ State ကို ဘယ်လိုသုံးမလဲ?
 Functional Component မှာ State သုံးဖို့အတွက် useState ဆိုတဲ့ Hook ကို သုံးရပါတယ်။
 
-```js
 const [stateName, setStateFunction] = useState(initialValue);
 
-```
 
 ၃။ ဥပမာ - Counter (ဂဏန်းတိုးခြင်း)
 
