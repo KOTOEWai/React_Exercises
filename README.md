@@ -14,6 +14,21 @@
   
   * [What is React?](#what-is-react?)
   * [Component-based architecture](#Component-based-architecture)
+  * [JSX](#JSX)
+  * [FunctionalComponents](#FunctionalComponents)
+  * [Props](#Props)
+  * [VirtualDOM](#VirtualDOM)
+  * [State](#State)
+  
+  * [Hooks](#Hooks)
+  * [useState](#useState)
+  * [useEffect](#useEffect)
+  * [useContext](#useContext)
+  * [useRef](#useRef)
+  * [useMemo](#useMemo)
+  * [useReducer](#useReducer)
+
+
 ---
 
 ## JavaScript Skills
@@ -1265,7 +1280,7 @@ JSX ဆိုတာ JavaScript ထဲမှာ HTML ရေးတာပါ။Logi
 
 ---
 
-# Functional Components
+# FunctionalComponents
 
 React ရဲ့ Functional Components ဆိုတာ ရိုးရိုးရှင်းရှင်းပြောရရင် JavaScript Function တစ်ခုပါပဲ။
 အရင်တုန်းက Class Components တွေကို အသုံးများခဲ့ကြပေမဲ့ အခုနောက်ပိုင်း React Development မှာ
@@ -1406,7 +1421,7 @@ function UserCard(props) {
 ```
 
 ---
-# Virtual DOM
+# VirtualDOM
 ```
 
 Virtual DOM (VDOM) ဆိုတာ အစစ်အမှန် Browser DOM ရဲ့ ပေါ့ပါးတဲ့ Copy (ကိုယ်ပွား) တစ်ခု ဖြစ်ပါတယ်။
@@ -1500,8 +1515,9 @@ function Counter() {
 
 
 ---
+## Hooks
 
-# useState Hook 
+# useState  
 
 `useState` ဆိုတာ React Hooks ထဲက **အခြေခံအကျဆုံးနဲ့ အရေးကြီးဆုံး Hook** ဖြစ်ပြီး component ထဲမှာ **state (data)** ကို သိမ်းဆည်းပြီး update လုပ်ဖို့ အသုံးပြုပါတယ်။ Functional Components တွေမှာ state ကို သုံးနိုင်အောင် React 16.8 မှ စတင်မိတ်ဆက်ခဲ့ပါတယ်။
 
@@ -1654,7 +1670,7 @@ setUser({ ...user, age: 30 });
 ---
 
 
-# useEffect Hook (React)
+# useEffect
 
 `useEffect` ဆိုတာ React Hooks ထဲက **side effects** တွေကို handle လုပ်ဖို့အတွက် အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Data fetching, DOM interaction, subscriptions, timers စတာတွေကို component render ပြီးနောက် run ချင်တဲ့အခါ `useEffect` ကို သုံးပါတယ်။
 
@@ -1857,7 +1873,7 @@ React 18 မှာ unnecessary effects တွေကို ရှောင်သ�
 ---
 
 
-# useContext Hook (React)
+# useContext
 
 `useContext` ဆိုတာ React Hooks ထဲက **prop drilling ကိုရှောင်ပြီး data ကို global အနေနဲ့ share လုပ်ဖို့** အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Theme, Auth user, language, settings စတဲ့ data တွေကို component များစွာမှာ သုံးရတဲ့အခါ အရမ်းအသုံးဝင်ပါတယ်။
 
@@ -2011,7 +2027,7 @@ const { user, setUser } = useContext(AuthContext);
 
 
 
-# useRef Hook 
+# useRef
 
 `useRef` ဆိုတာ React Hooks ထဲက **DOM elements ကို တိုက်ရိုက် access လုပ်ဖို့** နဲ့ **re-render မဖြစ်ဘဲ value ကို သိမ်းထားဖို့** အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Focus control, timers, previous values စတာတွေမှာ အရမ်းအသုံးဝင်ပါတယ်။
 
@@ -2149,7 +2165,7 @@ ref.current = ref.current + 1; // UI မပြောင်း
 * UI state အတွက် မသုံး
 
 ---
-# useMemo Hook (React)
+# useMemo
 
 `useMemo` ဆိုတာ React Hooks ထဲက **expensive calculation တွေကို memoize (cache) လုပ်ပြီး performance optimize** ဖို့ အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Re-render ဖြစ်တိုင်း calculation ပြန်မလုပ်ဘဲ dependency ပြောင်းမှသာ ပြန်တွက်စေပါတယ်။
 
@@ -2282,6 +2298,183 @@ const name = useMemo(() => "Aung Aung", []); // ❌ unnecessary
 * Measure performance first
 * Use only when needed
 * Keep dependency array accurate
+---
+
+
+# useReducer
+
+`useReducer` ဆိုတာ React Hooks ထဲက **complex state logic** (state များများ၊ update rule ရှုပ်တဲ့အချိန်) ကို စနစ်တကျ ကိုင်တွယ်ဖို့ အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Redux လို concept နဲ့ ဆင်တူပေမယ့် React အတွင်းမှာပဲ သုံးနိုင်ပါတယ်။
+
+---
+
+## 1. Why useReducer?
+
+`useState` က simple state တွေအတွက် အရမ်းကောင်းပေမယ့် —
+
+* State fields များလာရင်
+* Update logic ရှုပ်လာရင်
+* State change rules တိတိကျကျ ထိန်းချင်ရင်
+
+➡️ `useReducer` က ပိုသင့်တော်ပါတယ် ✅
+
+---
+
+## 2. Basic Concept
+
+`useReducer` မှာ အဓိက အစိတ်အပိုင်း ၃ ခုရှိပါတယ်။
+
+1. **State** – current data
+2. **Action** – ဘာလုပ်မလဲဆိုတဲ့ instruction
+3. **Reducer** – action အပေါ်မူတည်ပြီး state အသစ်ကို return ပြန်ပေးတဲ့ function
+
+---
+
+## 3. Basic Syntax
+
+```js
+import { useReducer } from "react";
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
+    case "decrement":
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+    </>
+  );
+}
+```
+
+---
+
+## 4. How it works (Step by Step)
+
+1. User clicks button
+2. `dispatch({ type: "increment" })` ကို ခေါ်
+3. React က reducer ကို `(state, action)` နဲ့ run
+4. Reducer က state အသစ် return
+5. Component re-render
+
+---
+
+## 5. Action Object Pattern
+
+Action တွေကို object အနေနဲ့ သုံးတာက best practice ဖြစ်ပါတယ်။
+
+```js
+{ type: "add", payload: 5 }
+```
+
+Reducer:
+
+```js
+case "add":
+  return { count: state.count + action.payload };
+```
+
+---
+
+## 6. useReducer vs useState
+
+| Feature             | useState | useReducer |
+| ------------------- | -------- | ---------- |
+| Simple state        | ✅        | ❌ Overkill |
+| Complex logic       | ❌        | ✅          |
+| Multiple fields     | ❌        | ✅          |
+| Predictable updates | ❌        | ✅          |
+
+---
+
+## 7. useReducer with Multiple State Fields
+
+```js
+const initialState = {
+  count: 0,
+  loading: false,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "start":
+      return { ...state, loading: true };
+    case "increment":
+      return { ...state, count: state.count + 1 };
+    case "stop":
+      return { ...state, loading: false };
+    default:
+      return state;
+  }
+}
+```
+
+---
+
+## 8. useReducer + useContext (Global State)
+
+```js
+const StateContext = createContext();
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <StateContext.Provider value={{ state, dispatch }}>
+      <Child />
+    </StateContext.Provider>
+  );
+}
+```
+
+➡️ Redux မသုံးပဲ Global State တည်ဆောက်နိုင်ပါတယ် ✅
+
+---
+
+## 9. Common Mistakes
+
+❌ Reducer ထဲမှာ state ကို mutate လုပ်ခြင်း
+
+```js
+state.count++; // ❌
+```
+
+✅ Always return new state
+
+```js
+return { ...state, count: state.count + 1 };
+```
+
+---
+
+## 10. When to use useReducer
+
+
+✅ Form state
+✅ Complex UI logic
+✅ Multiple related states
+
+❌ Simple toggle state
+❌ One-line updates
+
+---
+* `useReducer` = predictable state management
+* Complex logic အတွက် best choice
+* Redux concept ကို နားလည်အောင် ကူညီပေးတယ်
+* `useContext` နဲ့ တွဲသုံးရင် powerful
 ---
 
 
