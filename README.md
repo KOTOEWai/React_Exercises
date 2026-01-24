@@ -27,6 +27,7 @@
   * [useRef](#useRef)
   * [useMemo](#useMemo)
   * [useReducer](#useReducer)
+  * [CustomHooks](#CustomHooks)
 
 
 ---
@@ -1505,6 +1506,7 @@ function Counter() {
     </div>
   );
 }
+```
 
 * State က Component ရဲ့ အတွင်းပိုင်း data ဖြစ်တယ်။
 
@@ -1515,6 +1517,8 @@ function Counter() {
 
 
 ---
+
+
 ## Hooks
 
 # useState  
@@ -2475,6 +2479,203 @@ return { ...state, count: state.count + 1 };
 * Complex logic အတွက် best choice
 * Redux concept ကို နားလည်အောင် ကူညီပေးတယ်
 * `useContext` နဲ့ တွဲသုံးရင် powerful
+---
+
+
+# CustomHooks
+
+**Custom Hook** ဆိုတာ React Hooks (`useState`, `useEffect`, etc.) တွေကို ပေါင်းပြီး **logic ကို reusable ဖြစ်အောင် ပြန်ရေးထားတဲ့ function** တစ်ခုဖြစ်ပါတယ်။
+
+UI ကို မထိဘဲ **logic only** ကို share လုပ်ချင်တဲ့အခါ Custom Hooks ကို သုံးပါတယ်။
+
+---
+
+## 1. Why Custom Hooks?
+
+React App ကြီးလာတာနဲ့အမျှ —
+
+* Same logic ကို component များစွာမှာ copy/paste လုပ်နေရတာ ❌
+* Code မရှင်းတော့ဘူး ❌
+
+➡️ Custom Hooks သုံးရင်
+
+* Logic reuse လုပ်နိုင်တယ် ✅
+* Component သန့်ရှင်းတယ် ✅
+* Maintain လုပ်ရလွယ်တယ် ✅
+
+---
+
+## 2. Custom Hook Rules
+
+Custom Hook တစ်ခုက **Hook rules** ကို လိုက်နာရပါတယ်။
+
+1. Function name က **`use` နဲ့ စရမယ်** (`useFetch`, `useCounter`)
+2. React Hooks တွေကို **top-level မှာသာ ခေါ်ရမယ်**
+3. Condition / loop ထဲမှာ hook မခေါ်ရ ❌
+
+---
+
+## 3. Basic Custom Hook Example
+
+### useCounter
+
+```js
+import { useState } from "react";
+
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+
+  const increment = () => setCount(c => c + 1);
+  const decrement = () => setCount(c => c - 1);
+  const reset = () => setCount(initialValue);
+
+  return { count, increment, decrement, reset };
+}
+```
+
+### Usage
+
+```js
+function Counter() {
+  const { count, increment, decrement } = useCounter(10);
+
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+    </>
+  );
+}
+```
+
+---
+
+## 4. Custom Hook with useEffect
+
+### useOnlineStatus
+
+```js
+import { useEffect, useState } from "react";
+
+function useOnlineStatus() {
+  const [online, setOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const goOnline = () => setOnline(true);
+    const goOffline = () => setOnline(false);
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
+  return online;
+}
+```
+
+### Usage
+
+```js
+function Status() {
+  const online = useOnlineStatus();
+  return <p>{online ? "🟢 Online" : "🔴 Offline"}</p>;
+}
+```
+
+---
+
+## 5. Custom Hook for Data Fetching
+
+### useFetch
+
+```js
+import { useEffect, useState } from "react";
+
+function useFetch(url) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [url]);
+
+  return { data, loading, error };
+}
+```
+
+---
+
+## 6. Custom Hooks vs Components
+
+| Feature      | Custom Hook | Component |
+| ------------ | ----------- | --------- |
+| Return JSX   | ❌ No        | ✅ Yes     |
+| Logic reuse  | ✅           | ❌         |
+| UI rendering | ❌           | ✅         |
+
+---
+
+## 7. Sharing State vs Sharing Logic
+
+⚠️ Custom Hook ကို component နှစ်ခုမှာ သုံးရင်
+
+```js
+const a = useCounter();
+const b = useCounter();
+```
+
+➡️ **State မတူပါဘူး** (separate instances)
+
+➡️ Logic only shared, state not shared
+
+State shared ချင်ရင် → `useContext` / global store
+
+---
+
+## 8. Common Mistakes
+
+❌ Custom Hook name မှာ `use` မပါတာ
+
+❌ Hook ထဲက JSX return လုပ်ခြင်း
+
+❌ Hook ကို condition ထဲမှာ ခေါ်ခြင်း
+
+---
+
+## 9. When to create Custom Hook
+
+✅ Same logic reused 2+ components
+✅ Complex hook logic
+✅ Cleaner components
+
+❌ One-time simple logic
+
+---
+
+
+
+* Custom Hook = reusable logic
+* `use` prefix မဖြစ်မနေလို
+* UI မပါရ
+* Clean & scalable React apps အတွက် အရေးကြီး
+
 ---
 
 
