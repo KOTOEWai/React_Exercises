@@ -19,7 +19,7 @@
   * [Props](#Props)
   * [VirtualDOM](#VirtualDOM)
   * [State](#State)
-  
+  * [EventHandling](#EventHandling)
   * [Hooks](#Hooks)
   * [useState](#useState)
   * [useEffect](#useEffect)
@@ -28,6 +28,7 @@
   * [useMemo](#useMemo)
   * [useReducer](#useReducer)
   * [CustomHooks](#CustomHooks)
+  * [EventHandling](#EventHandling)
 
 
 ---
@@ -1516,6 +1517,201 @@ function Counter() {
 
 ---
 
+# EventHandling
+
+**Event Handling** ဆိုတာ React component ထဲမှာ **user actions** (click, input change, submit, key press…) တွေကို ဖမ်းယူပြီး logic run ပေးတဲ့ နည်းလမ်းဖြစ်ပါတယ်။ React ရဲ့ event system ကို **Synthetic Events** လို့ ခေါ်ပါတယ်။
+
+---
+
+## 1. React Events ဆိုတာဘာလဲ?
+
+React မှာ HTML DOM events တွေနဲ့ ဆင်တူပေမယ့် —
+
+* Event name တွေကို **camelCase** သုံးရပါတယ် (`onClick`, `onChange`)
+* Event handler ကို **function reference** အနေနဲ့ပဲ ပေးရပါတယ်
+
+---
+
+## 2. Basic Event Handling
+
+### Button Click
+
+```jsx
+function App() {
+  const handleClick = () => {
+    alert("Button clicked!");
+  };
+
+  return <button onClick={handleClick}>Click Me</button>;
+}
+```
+
+❌ မလုပ်ရတဲ့အရာ
+
+```jsx
+<button onClick={handleClick()}>Click</button> // ❌ immediately run
+```
+
+---
+
+## 3. Inline Event Handlers
+
+```jsx
+<button onClick={() => console.log("Clicked")}>Click</button>
+```
+
+➡️ Simple logic အတွက် OK
+➡️ Performance-sensitive နေရာတွေမှာ `useCallback` သုံးသင့်
+
+---
+
+## 4. Event Object (SyntheticEvent)
+
+```jsx
+function Input() {
+  const handleChange = (e) => {
+    console.log(e.target.value);
+  };
+
+  return <input onChange={handleChange} />;
+}
+```
+
+* `e` = SyntheticEvent
+* Cross-browser compatible
+
+---
+
+## 5. Handling Forms (onSubmit)
+
+```jsx
+function Form() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+➡️ `preventDefault()` မခေါ်ရင် page refresh ဖြစ်မယ် ❌
+
+---
+
+## 6. Passing Arguments to Event Handlers
+
+```jsx
+<button onClick={() => handleDelete(id)}>Delete</button>
+```
+
+```js
+function handleDelete(id) {
+  console.log(id);
+}
+```
+
+---
+
+## 7. Event Handling with State
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </>
+  );
+}
+```
+
+---
+
+## 8. Keyboard Events
+
+```jsx
+<input
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      console.log("Enter pressed");
+    }
+  }}
+/>
+```
+
+Common keyboard events:
+
+* `onKeyDown`
+* `onKeyUp`
+* `onKeyPress`
+
+---
+
+## 9. Mouse Events
+
+* `onClick`
+* `onDoubleClick`
+* `onMouseEnter`
+* `onMouseLeave`
+
+```jsx
+<div onMouseEnter={() => console.log("Hover")}>Hover me</div>
+```
+
+---
+
+## 10. Event Bubbling & stopPropagation
+
+React events bubble up by default.
+
+```jsx
+function App() {
+  return (
+    <div onClick={() => console.log("Parent")}>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("Child");
+        }}
+      >
+        Click
+      </button>
+    </div>
+  );
+}
+```
+
+---
+
+## 11. Event Handling Best Practices
+
+✅ Use handler functions
+✅ Keep logic small
+✅ Use `useCallback` for heavy components
+
+❌ Inline heavy logic
+❌ Calling function instead of passing reference
+
+---
+
+
+
+* React events = camelCase
+* Function reference only
+* `e` = SyntheticEvent
+* `preventDefault()` & `stopPropagation()` အရေးကြီး
+
+---
+
+
 
 ## Hooks
 
@@ -2673,6 +2869,200 @@ State shared ချင်ရင် → `useContext` / global store
 * `use` prefix မဖြစ်မနေလို
 * UI မပါရ
 * Clean & scalable React apps အတွက် အရေးကြီး
+
+---
+
+
+# EventHandling 
+
+**Event Handling** ဆိုတာ React component ထဲမှာ **user actions** (click, input change, submit, key press…) တွေကို ဖမ်းယူပြီး logic run ပေးတဲ့ နည်းလမ်းဖြစ်ပါတယ်။ React ရဲ့ event system ကို **Synthetic Events** လို့ ခေါ်ပါတယ်။
+
+---
+
+## 1. React Events ဆိုတာဘာလဲ?
+
+React မှာ HTML DOM events တွေနဲ့ ဆင်တူပေမယ့် —
+
+* Event name တွေကို **camelCase** သုံးရပါတယ် (`onClick`, `onChange`)
+* Event handler ကို **function reference** အနေနဲ့ပဲ ပေးရပါတယ်
+
+---
+
+## 2. Basic Event Handling
+
+### Button Click
+
+```jsx
+function App() {
+  const handleClick = () => {
+    alert("Button clicked!");
+  };
+
+  return <button onClick={handleClick}>Click Me</button>;
+}
+```
+
+❌ မလုပ်ရတဲ့အရာ
+
+```jsx
+<button onClick={handleClick()}>Click</button> // ❌ immediately run
+```
+
+---
+
+## 3. Inline Event Handlers
+
+```jsx
+<button onClick={() => console.log("Clicked")}>Click</button>
+```
+
+➡️ Simple logic အတွက် OK
+➡️ Performance-sensitive နေရာတွေမှာ `useCallback` သုံးသင့်
+
+---
+
+## 4. Event Object (SyntheticEvent)
+
+```jsx
+function Input() {
+  const handleChange = (e) => {
+    console.log(e.target.value);
+  };
+  return <input onChange={handleChange} />;
+}
+```
+
+* `e` = SyntheticEvent
+* Cross-browser compatible
+
+---
+
+## 5. Handling Forms (onSubmit)
+
+```jsx
+function Form() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+➡️ `preventDefault()` မခေါ်ရင် page refresh ဖြစ်မယ် ❌
+
+---
+
+## 6. Passing Arguments to Event Handlers
+
+```jsx
+<button onClick={() => handleDelete(id)}>Delete</button>
+```
+
+```js
+function handleDelete(id) {
+  console.log(id);
+}
+```
+
+---
+
+## 7. Event Handling with State
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </>
+  );
+}
+```
+
+---
+
+## 8. Keyboard Events
+
+```jsx
+<input
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      console.log("Enter pressed");
+    }
+  }}
+/>
+```
+
+Common keyboard events:
+
+* `onKeyDown`
+* `onKeyUp`
+* `onKeyPress`
+
+---
+
+## 9. Mouse Events
+
+* `onClick`
+* `onDoubleClick`
+* `onMouseEnter`
+* `onMouseLeave`
+
+```jsx
+<div onMouseEnter={() => console.log("Hover")}>Hover me</div>
+```
+
+---
+
+## 10. Event Bubbling & stopPropagation
+
+React events bubble up by default.
+
+```jsx
+function App() {
+  return (
+    <div onClick={() => console.log("Parent")}>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("Child");
+        }}
+      >
+        Click
+      </button>
+    </div>
+  );
+}
+```
+
+---
+
+## 11. Event Handling Best Practices
+
+✅ Use handler functions
+✅ Keep logic small
+✅ Use `useCallback` for heavy components
+
+❌ Inline heavy logic
+❌ Calling function instead of passing reference
+
+---
+
+
+
+* React events = camelCase
+* Function reference only
+* `e` = SyntheticEvent
+* `preventDefault()` & `stopPropagation()` အရေးကြီး
 
 ---
 
