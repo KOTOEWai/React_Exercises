@@ -12,6 +12,7 @@
   * [Optional Chaining (?.)&Nullish Coalescing (??)](#Optional-Chaining-(?.)&Nullish-Coalescing-(??))
   * [ES Modules](#ES-Modules)
   
+  * [React Key Concepts](#react-key-concepts)
   * [What is React?](#what-is-react?)
   * [Component-based architecture](#Component-based-architecture)
   * [JSX](#JSX)
@@ -20,6 +21,10 @@
   * [VirtualDOM](#VirtualDOM)
   * [State](#State)
   * [EventHandling](#EventHandling)
+  * [ConditionalRendering](#ConditionalRendering)
+  * [Lists&Keys](#Lists&Keys)
+
+
   * [Hooks](#Hooks)
   * [useState](#useState)
   * [useEffect](#useEffect)
@@ -51,7 +56,7 @@ function Welcome(props) {
 }
 ```
 
-#### ✅ အားသာချက်များ
+####  အားသာချက်များ
 
 * **Hoisting**
 
@@ -132,7 +137,7 @@ function ComponentA() {
 const ComponentB = () => <div>B</div>;
 ```
 
-✅ **အနှစ်ချုပ်**
+
 
 * Code ကို ကျစ်လျစ်ပြီး Modern ဖြစ်ချင်ရင် → **Arrow Function**
 * ရိုးရိုးရှင်းရှင်း Traditional Style → **Function Declaration**
@@ -550,7 +555,7 @@ const copy = { ...user }; // ✅ new object
 
 ---
 
-## 📌 Final Summary (အနှစ်ချုပ်)
+
 
 * **Property Shorthand** → Object ရေးတဲ့အခါ code ကို တိုစေတယ်
 * **Destructuring** → Props / State / Hooks ကို သန့်ရှင်းအောင်ရေးနိုင်
@@ -736,7 +741,7 @@ async function fetchAll() {
 
 ---
 
-## Summary (အနှစ်ချုပ်)
+
 
 * Promise က asynchronous result ကို ကိုယ်စားပြုတဲ့ object ဖြစ်ပါတယ်
 * `.then()` / `.catch()` နဲ့ Promise ကို handle လုပ်နိုင်ပါတယ်
@@ -913,7 +918,7 @@ const city = user?.address?.city ?? "Unknown";
 
 ---
 
-## Summary (အနှစ်ချုပ်)
+
 
 * `?.` → null / undefined ဖြစ်နိုင်တဲ့ object ကို **safe access** လုပ်ဖို့
 * `??` → null / undefined ဖြစ်မှသာ **default value** ပေးဖို့
@@ -1110,7 +1115,6 @@ import { User } from "./user";
 
 ---
 
-## Summary (အနှစ်ချုပ်)
 
 * ES Modules = modern JavaScript module system
 * `export` → code ကို အပြင်မှာ သုံးလို့ရအောင် ထုတ်ပေး
@@ -1120,6 +1124,8 @@ import { User } from "./user";
 * Clean architecture အတွက် မဖြစ်မနေ သိထားရမယ်
 
 ---
+
+## React Key Concepts
 
 # What is React?
 ```
@@ -1708,6 +1714,369 @@ function App() {
 * Function reference only
 * `e` = SyntheticEvent
 * `preventDefault()` & `stopPropagation()` အရေးကြီး
+
+---
+# ConditionalRendering 
+
+**Conditional Rendering** ဆိုတာ React component ထဲမှာ **condition (အခြေအနေ)** အပေါ်မူတည်ပြီး UI ကို ပြ/မပြ ဆုံးဖြတ်ပေးတဲ့ နည်းလမ်းဖြစ်ပါတယ်။
+
+React မှာ `if`, `&&`, `?: (ternary)`၊ function return စတဲ့ JavaScript နည်းလမ်းတွေကို သုံးပြီး render ကို ထိန်းချုပ်နိုင်ပါတယ်။
+
+---
+
+## 1. Why Conditional Rendering?
+
+UI တစ်ခုမှာ အောက်ပါအခြေအနေတွေ အမြဲကြုံရပါတယ်။
+
+* Login ဖြစ်/မဖြစ်
+* Data loading ဖြစ်/မဖြစ်
+* Error ရှိ/မရှိ
+* Role (admin / user) အလိုက် UI မတူခြင်း
+
+➡️ ဒီလိုအခြေအနေတွေကို handle လုပ်ဖို့ Conditional Rendering ကို သုံးပါတယ် ✅
+
+
+---
+
+
+## 2. Using if / else (Outside JSX)
+
+```jsx
+function Greeting({ isLoggedIn }) {
+  if (isLoggedIn) {
+    return <h1>Welcome back!</h1>;
+  }
+
+  return <h1>Please log in</h1>;
+}
+```
+
+➡️ Logic ရှင်းပြီး ဖတ်ရလွယ်
+➡️ Complex conditions အတွက် သင့်တော်
+
+---
+
+## 3. Using Ternary Operator (?:)
+
+```jsx
+function Greeting({ isLoggedIn }) {
+  return (
+    <h1>{isLoggedIn ? "Welcome back!" : "Please log in"}</h1>
+  );
+}
+```
+
+➡️ JSX ထဲမှာ တိုတိုနဲ့ ရေးချင်တဲ့အခါ သုံး
+
+⚠️ Nested ternary များရင် ဖတ်ရခက် ❌
+
+---
+
+## 4. Using Logical AND (&&)
+
+Condition true ဖြစ်ရင်ပဲ render လုပ်ချင်တဲ့အခါ သုံးပါတယ်။
+
+```jsx
+function Notification({ hasMessage }) {
+  return <>{hasMessage && <p>You have a new message</p>}</n}
+```
+
+⚠️ `0` value နဲ့ သတိထား
+
+```jsx
+{count && <p>{count}</p>} // count = 0 → render မဖြစ် ❌
+```
+
+---
+
+## 5. Using Logical OR (||)
+
+Default value ပြချင်တဲ့အခါ သုံးပါတယ်။
+
+```jsx
+<p>{username || "Guest"}</p>
+```
+
+⚠️ `""` , `0` တွေ false အဖြစ်သတ်မှတ်ခံရနိုင်
+
+---
+
+## 6. Conditional Rendering with State
+
+```jsx
+function Loader() {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <>
+      {loading ? <p>Loading...</p> : <p>Data Loaded</p>}
+    </>
+  );
+}
+```
+
+---
+
+## 7. Conditional Rendering with Functions
+
+```jsx
+function Status({ status }) {
+  const renderStatus = () => {
+    if (status === "success") return <p>✅ Success</p>;
+    if (status === "error") return <p>❌ Error</p>;
+    return <p>⏳ Loading</p>;
+  };
+
+  return <div>{renderStatus()}</div>;
+}
+```
+
+➡️ Condition များတဲ့အခါ ဖတ်ရလွယ်
+
+---
+
+## 8. Conditional Rendering Lists
+
+```jsx
+function List({ items }) {
+  if (items.length === 0) {
+    return <p>No items found</p>;
+  }
+
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+---
+
+## 9. Hiding vs Unmounting Components
+
+```jsx
+{show && <Modal />}
+```
+
+➡️ `show = false` ဖြစ်ရင် component **unmount** ဖြစ်
+
+CSS hide vs conditional rendering
+
+* `display: none` → component still exists
+* Conditional rendering → component removed
+
+---
+
+## 10. Common Mistakes
+
+❌ Nested ternary များလွန်းခြင်း
+
+❌ `&&` နဲ့ falsy values မစဉ်းစားခြင်း
+
+❌ JSX ထဲမှာ if/else တိုက်ရိုက်သုံးခြင်း
+
+---
+
+
+* Conditional Rendering = UI control by condition
+* `if` → complex logic
+* `?:` → simple conditions
+* `&&` → show/hide
+* Code readability ကို အမြဲ ဦးစားပေး
+
+---
+
+
+# Lists&Keys 
+
+**Lists & Keys** ဆိုတာ React မှာ **array data** ကို UI list အနေနဲ့ render လုပ်တဲ့အခါ မဖြစ်မနေ သိထားရမယ့် concept ဖြစ်ပါတယ်။ အထူးသဖြင့် performance နဲ့ bug မဖြစ်အောင် `key` ကို မှန်ကန်စွာ သုံးဖို့ အရေးကြီးပါတယ်။
+
+---
+
+## 1. Why Lists & Keys?
+
+Real-world React apps တွေမှာ —
+
+* Todo list
+* Users list
+* Products list
+* Messages list
+
+လို data တွေကို array အနေနဲ့ ရလာပြီး UI ထဲ render လုပ်ရပါတယ်။
+
+➡️ ဒီအတွက် `map()` + `key` ကို သုံးပါတယ် ✅
+
+---
+
+## 2. Rendering Lists with map()
+
+```jsx
+function UserList() {
+  const users = ["Aung Aung", "Su Su", "Kyaw Kyaw"];
+
+  return (
+    <ul>
+      {users.map(user => (
+        <li>{user}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+⚠️ ဒီ code မှာ **key မပါတာကြောင့် warning ထွက်မယ်** ❌
+
+---
+
+## 3. Using Keys (Required)
+
+```jsx
+function UserList() {
+  const users = ["Aung Aung", "Su Su", "Kyaw Kyaw"];
+
+  return (
+    <ul>
+      {users.map((user, index) => (
+        <li key={index}>{user}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+➡️ Warning မရှိတော့ပါဘူး ✅
+
+---
+
+## 4. What is a Key?
+
+`key` ဆိုတာ React ကို —
+
+> “ဒီ list item က ဘယ် item ဖြစ်တယ်”
+
+လို့ သိအောင် ပြောပေးတဲ့ **unique identifier** ဖြစ်ပါတယ်။
+
+React က re-render အချိန်မှာ —
+
+* ဘာကို update လုပ်မလဲ
+* ဘာကို remove လုပ်မလဲ
+* ဘာကို add လုပ်မလဲ
+
+ကို `key` အပေါ် မူတည်ပြီး ဆုံးဖြတ်ပါတယ်။
+
+---
+
+## 5. Best Key: Unique ID
+
+```jsx
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+✅ Database ID
+✅ UUID
+
+---
+
+## 6. Using index as key (When OK / Not OK)
+
+### ⚠️ Allowed (Rare cases)
+
+```js
+items.map((item, index) => <li key={index}>{item}</li>);
+```
+
+OK ဖြစ်တဲ့အခြေအနေများ
+
+* List order မပြောင်း
+* Item မ add / remove
+* Static list
+
+### ❌ Not Recommended
+
+* Dynamic list
+* Sort / filter
+* Insert / delete
+
+➡️ Bugs & UI issues ဖြစ်နိုင် ❌
+
+---
+
+## 7. Rendering Complex Lists
+
+```jsx
+function ProductList({ products }) {
+  return (
+    <div>
+      {products.map(product => (
+        <div key={product.id}>
+          <h3>{product.name}</h3>
+          <p>{product.price} MMK</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+---
+
+## 8. Conditional Rendering with Lists
+
+```jsx
+{items.length === 0 ? (
+  <p>No items found</p>
+) : (
+  items.map(item => <Item key={item.id} {...item} />)
+)}
+```
+
+---
+
+## 9. Keys Are Not Props
+
+```jsx
+<Item key={item.id} name={item.name} />
+```
+
+❗ `key` ကို component ထဲမှာ access မလုပ်နိုင်ပါ
+
+```js
+function Item(props) {
+  console.log(props.key); // ❌ undefined
+}
+```
+
+➡️ ID ကို prop အနေနဲ့ သီးသန့် ပို့ရပါမယ်
+
+---
+
+## 10. Common Mistakes
+
+❌ key မပေးခြင်း
+
+❌ index ကို dynamic list မှာ သုံးခြင်း
+
+❌ non-unique key သုံးခြင်း
+
+---
+
+
+
+* Lists = `map()`
+* Keys = unique identifier
+* Stable keys = better performance
+* Index key ကို သတိထား
 
 ---
 
