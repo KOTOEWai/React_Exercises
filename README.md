@@ -2079,7 +2079,140 @@ function Item(props) {
 * Index key ကို သတိထား
 
 ---
+# DataFlow 
 
+React မှာ **Data Flow** ဆိုတာ  
+
+ **data (state / props) တွေက Component တွေအကြား ဘယ်လို လမ်းကြောင်းနဲ့ သွားလာသလဲ**  
+ဆိုတာကို ပြောတာပါ။
+
+React ရဲ့ အဓိက အယူအဆတစ်ခုက  
+> **One-way (Unidirectional) Data Flow** ဖြစ်ပါတယ်။
+
+---
+
+## 1. One-Way Data Flow ဆိုတာဘာလဲ?
+
+React မှာ data တွေဟာ  
+**Parent Component → Child Component** ကိုသာ ဆင်းသွားနိုင်ပါတယ်။
+
+❌ Child က Parent ကို တိုက်ရိုက် data ပြန်မပို့နိုင်ပါ  
+✅ Callback function ကို အသုံးပြုပြီး ပြန်ပို့ရပါတယ်
+
+---
+
+## 2. Parent → Child (Props)
+
+Parent Component က data ကို  
+**props** အနေနဲ့ Child Component ဆီ ပို့ပါတယ်။
+
+### Example
+
+```js
+function Parent() {
+  const name = "Aung Aung";
+
+  return <Child name={name} />;
+}
+
+function Child(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+```
+* Props က read-only ဖြစ်ပါတယ်
+* Child component မှာ props ကို ပြင်လို့မရပါ
+
+## 3. Child → Parent (Callback Functions)
+
+React မှာ data flow က one-way ဖြစ်လို့
+Child က Parent ကို data ပြန်ပို့ချင်ရင်
+function ကို props အနေနဲ့ ပို့ ရပါတယ်။
+
+
+```js
+function Parent() {
+  const handleMessage = (msg) => {
+    console.log(msg);
+  };
+
+  return <Child sendMessage={handleMessage} />;
+}
+
+function Child({ sendMessage }) {
+  return (
+    <button onClick={() => sendMessage("Hello from Child")}>
+      Send
+    </button>
+  );
+}
+```
+* ဒါကို Lifting State Up လို့ ခေါ်ပါတယ်
+
+## 4. Data Flow with useContext
+
+Props ကို အဆင့်ဆင့် မပို့ချင်ရင်
+Context API ကို သုံးနိုင်ပါတယ်။
+
+```js
+const ThemeContext = React.createContext();
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Page />
+    </ThemeContext.Provider>
+  );
+}
+
+function Page() {
+  return <Content />;
+}
+
+function Content() {
+  const theme = useContext(ThemeContext);
+  return <div>Theme: {theme}</div>;
+}
+ ```
+
+
+## 5. Data Flow with State Management Libraries
+
+App ကြီးလာတဲ့အခါ
+props + context နဲ့ မလွယ်တော့ပါဘူး။
+
+ဒီအချိန်မှာ-
+
+Redux
+
+Zustand
+
+Recoil
+
+Jotai
+
+လို library တွေ သုံးပါတယ်။
+
+```
+Store
+ ↓
+Components
+ ↑ (actions)
+ ```
+
+## Common Mistakes ⚠️
+
+❌ Props ကို child မှာ modify လုပ်ခြင်း
+❌ State ကို wrong component မှာထားခြင်း
+❌ Unnecessary prop drilling
+❌ Global state ကို အလွန်အကျွံ သုံးခြင်း
+
+
+React မှာ One-way Data Flow ကို သုံးတယ်
+Data → props နဲ့ အောက်ဆင်း
+Events → callback နဲ့ အပေါ်တက်
+Shared data → Lifting State Up
+App ကြီးရင် → Context / State Management
+---
 
 
 ## Hooks
@@ -3240,199 +3373,3 @@ State shared ချင်ရင် → `useContext` / global store
 * Clean & scalable React apps အတွက် အရေးကြီး
 
 ---
-
-
-# EventHandling 
-
-**Event Handling** ဆိုတာ React component ထဲမှာ **user actions** (click, input change, submit, key press…) တွေကို ဖမ်းယူပြီး logic run ပေးတဲ့ နည်းလမ်းဖြစ်ပါတယ်။ React ရဲ့ event system ကို **Synthetic Events** လို့ ခေါ်ပါတယ်။
-
----
-
-## 1. React Events ဆိုတာဘာလဲ?
-
-React မှာ HTML DOM events တွေနဲ့ ဆင်တူပေမယ့် —
-
-* Event name တွေကို **camelCase** သုံးရပါတယ် (`onClick`, `onChange`)
-* Event handler ကို **function reference** အနေနဲ့ပဲ ပေးရပါတယ်
-
----
-
-## 2. Basic Event Handling
-
-### Button Click
-
-```jsx
-function App() {
-  const handleClick = () => {
-    alert("Button clicked!");
-  };
-
-  return <button onClick={handleClick}>Click Me</button>;
-}
-```
-
-❌ မလုပ်ရတဲ့အရာ
-
-```jsx
-<button onClick={handleClick()}>Click</button> // ❌ immediately run
-```
-
----
-
-## 3. Inline Event Handlers
-
-```jsx
-<button onClick={() => console.log("Clicked")}>Click</button>
-```
-
-➡️ Simple logic အတွက် OK
-➡️ Performance-sensitive နေရာတွေမှာ `useCallback` သုံးသင့်
-
----
-
-## 4. Event Object (SyntheticEvent)
-
-```jsx
-function Input() {
-  const handleChange = (e) => {
-    console.log(e.target.value);
-  };
-  return <input onChange={handleChange} />;
-}
-```
-
-* `e` = SyntheticEvent
-* Cross-browser compatible
-
----
-
-## 5. Handling Forms (onSubmit)
-
-```jsx
-function Form() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" />
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
-```
-
-➡️ `preventDefault()` မခေါ်ရင် page refresh ဖြစ်မယ် ❌
-
----
-
-## 6. Passing Arguments to Event Handlers
-
-```jsx
-<button onClick={() => handleDelete(id)}>Delete</button>
-```
-
-```js
-function handleDelete(id) {
-  console.log(id);
-}
-```
-
----
-
-## 7. Event Handling with State
-
-```jsx
-function Counter() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <p>{count}</p>
-      <button onClick={() => setCount(count + 1)}>+</button>
-    </>
-  );
-}
-```
-
----
-
-## 8. Keyboard Events
-
-```jsx
-<input
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      console.log("Enter pressed");
-    }
-  }}
-/>
-```
-
-Common keyboard events:
-
-* `onKeyDown`
-* `onKeyUp`
-* `onKeyPress`
-
----
-
-## 9. Mouse Events
-
-* `onClick`
-* `onDoubleClick`
-* `onMouseEnter`
-* `onMouseLeave`
-
-```jsx
-<div onMouseEnter={() => console.log("Hover")}>Hover me</div>
-```
-
----
-
-## 10. Event Bubbling & stopPropagation
-
-React events bubble up by default.
-
-```jsx
-function App() {
-  return (
-    <div onClick={() => console.log("Parent")}>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          console.log("Child");
-        }}
-      >
-        Click
-      </button>
-    </div>
-  );
-}
-```
-
----
-
-## 11. Event Handling Best Practices
-
-✅ Use handler functions
-✅ Keep logic small
-✅ Use `useCallback` for heavy components
-
-❌ Inline heavy logic
-❌ Calling function instead of passing reference
-
----
-
-
-
-* React events = camelCase
-* Function reference only
-* `e` = SyntheticEvent
-* `preventDefault()` & `stopPropagation()` အရေးကြီး
-
----
-
-
