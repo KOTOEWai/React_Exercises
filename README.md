@@ -1427,7 +1427,7 @@ function UserCard(props) {
   );
 }
 ```
-[Link Text](https://www.robinwieruch.de/react-pass-props-to-component/)
+[UseFull Link For Pros](https://www.robinwieruch.de/react-pass-props-to-component/)
 
 ---
 # VirtualDOM
