@@ -34,6 +34,7 @@
   * [useContext](#useContext)
   * [useRef](#useRef)
   * [useMemo](#useMemo)
+  * [useCallback](#useCallback)
   * [useReducer](#useReducer)
   * [CustomHooks](#CustomHooks)
  
@@ -3000,6 +3001,97 @@ const name = useMemo(() => "Aung Aung", []); // ❌ unnecessary
 * Measure performance first
 * Use only when needed
 * Keep dependency array accurate
+---
+
+
+# useCallback
+
+`useCallback` ဆိုတာ React Hooks ထဲက **function တွေကို memoize (cache) လုပ်ပြီး performance optimize** ဖို့ အသုံးပြုတဲ့ hook ဖြစ်ပါတယ်။ Re-render ဖြစ်တိုင်း function အသစ် ထပ်မဖန်တီးစေဘဲ dependency ပြောင်းမှသာ function အသစ်ကို cache ထဲမှာ ပြန်သိမ်းစေပါတယ်။
+
+---
+
+## 1. Why useCallback?
+
+React မှာ component တစ်ခု re-render ဖြစ်တဲ့အခါ သူ့ထဲမှာရှိတဲ့ function တွေဟာလည်း function အသစ်တွေအဖြစ် ပြန်လည်ဖန်တီးခံရပါတယ်။
+
+အဲ့ဒီအခါ —
+
+* Child components တွေဆီ function pass လုပ်တဲ့အခါ (props အနေနဲ့) အဲ့ဒီ child components တွေက မလိုလားအပ်ဘဲ re-render ဖြစ်စေပါတယ် (အထူးသဖြင့် `React.memo` သုံးထားတဲ့ components တွေမှာပါ)။
+* Performance ကို ထိခိုက်စေနိုင်ပါတယ်။
+
+---
+
+## 2. Basic Syntax
+
+```js
+import { useCallback } from "react";
+
+const memoizedCallback = useCallback(() => {
+  doSomething(a, b);
+}, [a, b]);
+```
+
+* First argument → cache လုပ်ချင်တဲ့ function
+* Second argument → dependency array
+
+---
+
+## 3. Simple Example
+
+```jsx
+import { useState, useCallback } from "react";
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    console.log("Button Clicked");
+  }, []); // [] ပါလို့ တစ်ကြိမ်ပဲ ဖန်တီးပါမယ်
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>Re-render Parent</button>
+      <Child onClick={handleClick} />
+    </>
+  );
+}
+```
+
+➡️ Parent re-render ဖြစ်ပေမယ့် `handleClick` က အသစ်ထပ်မဖြစ်တော့တဲ့အတွက် `Child` component (အကယ်၍ `React.memo` သုံးထားရင်) re-render မဖြစ်တော့ပါဘူး ✅
+
+---
+
+## 4. When to use useCallback
+
+✅ **Child Component Optimization**: `React.memo` သုံးထားတဲ့ child component ဆီကို function တစ်ခု props အနေနဲ့ ပေးပို့တဲ့အခါ။
+
+✅ **Dependency handling**: Function ကို အခြား hook (ဥပမာ- `useEffect`) ရဲ့ dependency array ထဲမှာ ထည့်သုံးရတဲ့အခါ။
+
+---
+
+## 5. useCallback vs useMemo
+
+| Feature  | useCallback    | useMemo           |
+| -------- | -------------- | ----------------- |
+| Returns  | Function       | Value             |
+| Purpose  | Cache function | Cache calculation |
+| Usage    | Event handlers | Derived data      |
+
+---
+
+## 6. Common Mistakes
+
+❌ **Overusing useCallback**: ရိုးရိုး component တွေ ဒါမှမဟုတ် performance မထိခိုက်တဲ့ logic တွေမှာ လိုက်သုံးရင် logic ပိုရှုပ်ပြီး memory ပိုစားနိုင်ပါတယ်။
+
+---
+
+## 7. Summary
+
+* `useCallback` = memoize function
+* Dependency မပြောင်းရင် function အဟောင်းကိုပဲ ပြန်ပေးတယ်
+* Child component တွေရဲ့ မလိုလားအပ်တဲ့ re-render ကို ကာကွယ်ဖို့ သုံးတယ်
+* `useMemo` နဲ့ concept ဆင်တူပေမယ့် function ကို cache လုပ်တာဖြစ်တယ်
+
 ---
 
 
