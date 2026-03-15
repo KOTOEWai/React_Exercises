@@ -2,16 +2,17 @@
 
 ## 📑 Table of Contents
 
+
   * [JavaScript Skills](#javascript-skills)
   * [Function Declarations vs Arrow Functions](#function-declarations-vs-arrow-functions)
   * [Template Literals](#template-literals)
   * [Short Conditionals](#Short-Conditionals)
   * [Three Array Methods](#Three-Array-Methods)
-  * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript )
+  * [Object Tricks in JavaScript ](#Object-Tricks-in-JavaScript)
   * [Promises&Async/Await](#Promises&Async/Await)
   * [Optional Chaining (?.)&Nullish Coalescing (??)](#Optional-Chaining-(?.)&Nullish-Coalescing-(??))
   * [ES Modules](#ES-Modules)
-  
+
   * [React Key Concepts](#react-key-concepts)
   * [What is React?](#what-is-react?)
   * [Component-based architecture](#Component-based-architecture)
@@ -23,6 +24,8 @@
   * [EventHandling](#EventHandling)
   * [ConditionalRendering](#ConditionalRendering)
   * [Lists&Keys](#Lists&Keys)
+  * [DataFlow](#DataFlow)
+
 
 
   * [Hooks](#Hooks)
@@ -33,9 +36,7 @@
   * [useMemo](#useMemo)
   * [useReducer](#useReducer)
   * [CustomHooks](#CustomHooks)
-  * [EventHandling](#EventHandling)
-
-
+ 
 ---
 
 ## JavaScript Skills
