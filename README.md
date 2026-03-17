@@ -1,7 +1,5 @@
 
-
-## 📑 Table of Contents
-
+##  Table of Contents
 
   * [JavaScript Skills](#javascript-skills)
   * [Function Declarations vs Arrow Functions](#function-declarations-vs-arrow-functions)
@@ -12,7 +10,6 @@
   * [Promises&Async/Await](#Promises&Async/Await)
   * [Optional Chaining (?.)&Nullish Coalescing (??)](#Optional-Chaining-(?.)&Nullish-Coalescing-(??))
   * [ES Modules](#ES-Modules)
-
   * [React Key Concepts](#react-key-concepts)
   * [What is React?](#what-is-react?)
   * [Component-based architecture](#Component-based-architecture)
@@ -25,9 +22,6 @@
   * [ConditionalRendering](#ConditionalRendering)
   * [Lists&Keys](#Lists&Keys)
   * [DataFlow](#DataFlow)
-
-
-
   * [Hooks](#Hooks)
   * [useState](#useState)
   * [useEffect](#useEffect)
